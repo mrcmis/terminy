@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+<div id = "main">
+    <form class="w3-container" action="#" th:action="@{/login}" method="post">
+
+        <label class="w3-text-red"><b>Login</b></label>
+        <input class="w3-input w3-border" type="text" name="login" th:placeholder="login" id="login">
+
+        <label class="w3-text-red"><b>Password</b></label>
+        <input class="w3-input w3-border" type="password" name="password" th:placeholder="password" id="password">
+
+        <div align="center" th:if="${param.error}">
+            <p style="font-size: 20; color: #FF1C19;">Email or Password is invalid.</p>
+        </div>
+
+        <button class="w3-btn w3-red" type="submit" id="button_submit">Login</button>
+
+    </form>
+
+</div>
+</body>
+</html>
