@@ -1,7 +1,6 @@
 package com.fis.is.terminy.repositories;
 
 import com.fis.is.terminy.models.Client;
-import com.fis.is.terminy.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;

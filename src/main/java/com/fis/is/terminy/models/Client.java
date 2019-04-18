@@ -6,7 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-public class Client extends Subject {
+public class Client extends BaseEntity {
     @Column
     @NotBlank(message = "NB")
     private String phone;
