@@ -1,0 +1,66 @@
+package com.fis.is.terminy.models;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
+@Entity
+public class Company extends BaseEntity {
+    @Column
+    @NotBlank(message = "NB")
+    private String phone;
+
+    @Column(unique = true)
+    @NotBlank(message = "NB")
+    @Email
+    private String mail;
+
+    @Column
+    @NotBlank(message = "NB")
+    private String name;
+
+    @Column
+    @NotBlank(message = "NB")
+    private String surname;
+
+    //TODO
+    @Override
+    public String getPassword() {
+        return new BCryptPasswordEncoder().encode(new String("company"));
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+}
