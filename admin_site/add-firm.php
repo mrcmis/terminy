@@ -62,6 +62,46 @@ function set_privileges($link, $db_name, $company_id) {
     }
 }
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+function send_login_data($login, $password, $email, $name) {
+    header('Content-type: text/html; charset=utf-8');
+
+    require 'phpmailer/src/Exception.php';
+    require 'phpmailer/src/PHPMailer.php';
+    require 'phpmailer/src/SMTP.php';
+
+    date_default_timezone_set('Europe/Warsaw');
+
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = "terminy.io@gmail.com";
+        $mail->Password = "terminy1!";
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        $mail->CharSet = "UTF-8";
+        $mail->setLanguage('pl', '/phpmailer/language');
+
+        $mail->setFrom('terminy.io@gmail.com', 'Terminy - administrator');
+        $mail->addAddress($email, $name);
+
+        $mail->Subject = "[TERMINY] Dane do logowania";
+        $mail->Body = "login: " . $login . " hasło: " . $password;
+
+        $mail->send();
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        throw new Exception("Mail error", 1);
+        
+    }
+}
+
 session_start();
  
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
@@ -141,6 +181,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                         if($stmt = mysqli_prepare($link, $sql)){
                             mysqli_stmt_bind_param($stmt, "issss", $id, $name, $coded_name, $email, $phone);
                             if(mysqli_stmt_execute($stmt)) {
+                                send_login_data($login, $random_password, $email, $name);
                                 header("location: home.php?status=added");
                                 echo "Poprawnie dodano firmę.";
                             }
