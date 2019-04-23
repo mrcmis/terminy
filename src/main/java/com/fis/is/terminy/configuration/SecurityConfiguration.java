@@ -1,6 +1,7 @@
 package com.fis.is.terminy.configuration;
 
 
+import com.fis.is.terminy.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
     @Value("${spring.queries.users-query}")
     private String usersQuery;
 
@@ -33,9 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().usersByUsernameQuery(usersQuery)
-                .authoritiesByUsernameQuery("select login, 'SITE_USER' from base_entity where login=?")
-                .dataSource(dataSource).passwordEncoder(encoder);
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(encoder);
     }
 
     @Override
@@ -46,7 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/register").permitAll()
-                .antMatchers("/home/**").hasAnyAuthority("SUPER_USER", "ADMIN_USER", "SITE_USER")
+                .antMatchers("/home/**").hasAnyAuthority("USER", "COMPANY")
                 .anyRequest().authenticated()
                 .and()
                 // form login
