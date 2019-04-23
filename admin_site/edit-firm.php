@@ -17,7 +17,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     exit;
 }
 
-if(!isset($_GET["firm-id"])){
+if(!isset($_GET["firm-id"]) && $_SERVER["REQUEST_METHOD"] !== "POST"){
     header("location: home.php");
     exit;
 }
@@ -29,7 +29,7 @@ $id = trim($_GET["firm-id"]);
 $name = $mail = $phone = "";
 $blocking_users = $mail_notification = $reports_generation = 0;
 
-$sql = "SELECT name, mail, phone, blocking_users, mail_notification, reports_generation FROM $db_name.firm WHERE id=?";
+$sql = "SELECT name, mail, phone, blocking_users, mail_notification, reports_generation FROM $db_name.company WHERE id=?";
 
 if($stmt = mysqli_prepare($link, $sql)) {
     mysqli_stmt_bind_param($stmt, "i", $id);
@@ -51,74 +51,101 @@ if($stmt = mysqli_prepare($link, $sql)) {
     }
     mysqli_stmt_close($stmt);
 }
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $new_mail = trim($_POST["email"]);
+    if (!filter_var($new_mail, FILTER_VALIDATE_EMAIL)) {
+        $email_err = "Niepoprawny format.";
+    }
+
+    $new_phone = trim($_POST["phone"]);
+    if(!preg_match("/^[0-9]+$/", $new_phone)) {
+      $phone_err = "Niepoprawny format.";
+    }
+
+    $new_name = trim($_POST["name"]);
+    if(empty($email_err) && empty($phone_err)) {
+        if($new_name != $name) {
+            $sql = "UPDATE $db_name.company SET name=? WHERE id=?";
+            if($stmt = mysqli_prepare($link, $sql)){
+                mysqli_stmt_bind_param($stmt, "sd", $new_name, $id);
+                if(mysqli_stmt_execute($stmt)) {
+                    header("location: home.php?status=updated");
+                }
+                else {
+                    echo "Błąd! Spróbuj później.";
+                }      
+            }
+        }
+        if($new_mail != $mail) {
+            $sql = "UPDATE $db_name.company SET mail=? WHERE id=?";
+            if($stmt = mysqli_prepare($link, $sql)){
+                mysqli_stmt_bind_param($stmt, "sd", $new_mail, $id);
+                if(mysqli_stmt_execute($stmt)) {
+                    header("location: home.php?status=updated");
+                }
+                else {
+                    echo "Błąd! Spróbuj później.";
+                }      
+            }
+        }
+        if($new_phone != $phone) {
+            $sql = "UPDATE $db_name.company SET phone=? WHERE id=?";
+            if($stmt = mysqli_prepare($link, $sql)){
+                mysqli_stmt_bind_param($stmt, "sd", $new_phone, $id);
+                if(mysqli_stmt_execute($stmt)) {
+                    header("location: home.php?status=updated");
+                }
+                else {
+                    echo "Błąd! Spróbuj później.";
+                }      
+            }
+        }
+        $new_blocking_users = isset($_POST['feature-block-users']) ? 1 : 0;
+        $new_mail_notification = isset($_POST['feature-mail-notification']) ? 1 : 0;
+        $new_reports_generation = isset($_POST['feature-reports-generation']) ? 1 : 0;
+
+        if($new_blocking_users != $blocking_users) {
+            $sql = "UPDATE $db_name.company SET blocking_users=? WHERE id=?";
+            if($stmt = mysqli_prepare($link, $sql)){
+                mysqli_stmt_bind_param($stmt, "dd", $new_blocking_users, $id);
+                if(mysqli_stmt_execute($stmt)) {
+                    header("location: home.php?status=updated");
+                }
+                else {
+                    echo "Błąd! Spróbuj później.";
+                }      
+            }
+        }
+        if($new_mail_notification != $mail_notification) {
+            $sql = "UPDATE $db_name.company SET mail_notification=? WHERE id=?";
+            if($stmt = mysqli_prepare($link, $sql)){
+                mysqli_stmt_bind_param($stmt, "dd", $new_mail_notification, $id);
+                if(mysqli_stmt_execute($stmt)) {
+                    header("location: home.php?status=updated");
+                }
+                else {
+                    echo "Błąd! Spróbuj później.";
+                }      
+            }
+        }
+        if($new_reports_generation != $reports_generation) {
+            $sql = "UPDATE $db_name.company SET reports_generation=? WHERE id=?";
+            if($stmt = mysqli_prepare($link, $sql)){
+                mysqli_stmt_bind_param($stmt, "dd", $new_reports_generation, $id);
+                if(mysqli_stmt_execute($stmt)) {
+                    header("location: home.php?status=updated");
+                }
+                else {
+                    echo "Błąd! Spróbuj później.";
+                }      
+            }
+        }
+
+    }
+}
 mysqli_close($link);
-
-// if($_SERVER["REQUEST_METHOD"] == "POST") {
-
-//     $new_email = trim($_POST["email"]);
-//     if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
-//         $email_err = "Niepoprawny format.";
-//     }
-
-//     $new_phone = trim($_POST["phone"]);
-//     if(!preg_match("/^[0-9]+$/", $new_phone)) {
-//       $phone_err = "Niepoprawny format.";
-//     }
-
-    
-//     if(empty($login_err) && empty($email_err) && empty($phone_err)) {
-
-//         $sql = "INSERT INTO mojabaza.subject(login, password, type) VALUES(?, ?, 1)";
-
-//         if($stmt = mysqli_prepare($link, $sql)){
-//             mysqli_stmt_bind_param($stmt, "ss", $param_login, $param_password);
-            
-//             $param_login = $login;
-//             $param_password = generateRandomString();
-
-//             if(mysqli_stmt_execute($stmt)) {
-//                 $sql = "SELECT id FROM mojabaza.subject WHERE login = ?";
-
-//                 if($stmt = mysqli_prepare($link, $sql)){
-//                     mysqli_stmt_bind_param($stmt, "s", $param_login);
-                    
-//                     $param_login = $login;
-
-//                     if(mysqli_stmt_execute($stmt)) {
-//                         mysqli_stmt_store_result($stmt);       
-//                         mysqli_stmt_bind_result($stmt, $id);
-//                         mysqli_stmt_fetch($stmt);
-
-//                         $name = trim($_POST["name"]);
-//                         $coded_name = generateCodedName($link);
-//                         $blocking_users = isset($_POST['feature-block-users']) ? 1 : 0;
-//                         $mail_notification = isset($_POST['feature-mail-notification']) ? 1 : 0;
-//                         $reports_generation = isset($_POST['feature-phone-notification']) ? 1 : 0;
-
-//                         $sql = "INSERT INTO mojabaza.firm(id, name, coded_name, mail, phone, blocking_users, mail_notification, reports_generation) 
-//                         VALUES(?, ?, ?, ?, ?, $blocking_users, $mail_notification, $reports_generation)";
-
-//                         if($stmt = mysqli_prepare($link, $sql)){
-//                             mysqli_stmt_bind_param($stmt, "issss", $id, $name, $coded_name, $email, $phone);
-//                             if(mysqli_stmt_execute($stmt)) {
-//                                 header("location: home.php?status=added");
-//                                 echo "Poprawnie dodano firmę.";
-//                             }
-//                             else {
-//                                 echo "Błąd! Spróbuj później.";
-//                             }
-//                         } else {
-//                             echo "Błąd! Spróbuj później.";
-//                         }
-//                     }
-//                 }
-//             } else{
-//                 echo "Błąd! Spróbuj później.";
-//             }
-//         }
-//     }
-//     mysqli_close($link);
-// }
 
 ?>
 
@@ -135,7 +162,7 @@ mysqli_close($link);
 </head>
 <body>
     <div class="wrapper">
-        <form class="form-horizontal" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <form class="form-horizontal" action="" method="post">
         <fieldset>
         <legend><h1>Edytuj dane firmy</h1></legend>
 
@@ -181,7 +208,7 @@ mysqli_close($link);
                 </div>
                 <div class="checkbox">
                     <label for="feature-phone-notification">
-                        <input type="checkbox" name="feature-phone-notification" id="feature-phone-notification" value="3"
+                        <input type="checkbox" name="feature-reports-generation" id="feature-reports-generation" value="3"
                         <?php echo ($reports_generation) ? 'checked=""' : ''; ?>>
                         Generowanie raportów
                     </label>

@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Company extends BaseEntity {
@@ -13,7 +14,6 @@ public class Company extends BaseEntity {
     @NotBlank(message = "NB")
     private String phone;
 
-    @Column(unique = true)
     @NotBlank(message = "NB")
     @Email
     private String mail;
@@ -24,7 +24,19 @@ public class Company extends BaseEntity {
 
     @Column
     @NotBlank(message = "NB")
-    private String surname;
+    private String codedName;
+
+    @Column
+    @NotNull
+    private boolean mailNotification;
+
+    @Column
+    @NotNull
+    private boolean reportsGeneration;
+
+    @Column
+    @NotNull
+    private boolean blockingUsers;
 
     //TODO
     @Override
@@ -56,11 +68,35 @@ public class Company extends BaseEntity {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getCodedName() {
+        return codedName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setCodedName(String codedName) {
+        this.codedName = codedName;
+    }
+
+    public boolean isMailNotification() {
+        return mailNotification;
+    }
+
+    public void setMailNotification(boolean mailNotification) {
+        this.mailNotification = mailNotification;
+    }
+
+    public boolean isBlockingUsers() {
+        return blockingUsers;
+    }
+
+    public void setBlockingUsers(boolean blockingUsers) {
+        this.blockingUsers = blockingUsers;
+    }
+
+    public boolean isReportsGeneration() {
+        return reportsGeneration;
+    }
+
+    public void setReportsGeneration(boolean reportsGeneration) {
+        this.reportsGeneration = reportsGeneration;
     }
 }

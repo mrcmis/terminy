@@ -12,13 +12,17 @@ function addAlert() {
         echo "<div class='alert alert-success' role='alert'>";
         echo "<b style='color: forestgreen'>Poprawnie dodano firmę</b>";
         echo "</div>";
+    } elseif (isset($_GET["status"]) AND $_GET["status"]=="updated") {
+        echo "<div class='alert alert-success' role='alert'>";
+        echo "<b style='color: forestgreen'>Poprawnie zaktualizowano firmę</b>";
+        echo "</div>";
     }
 }
 
 function generateRecords() {
     require_once "config.php";
 
-    $sql = "SELECT f.id, name, coded_name, login, mail, phone FROM $db_name.firm f join $db_name.base_entity s ON f.id=s.id";
+    $sql = "SELECT f.id, name, coded_name, login, mail, phone FROM $db_name.company f join $db_name.base_entity s ON f.id=s.id";
     if($result = mysqli_query($link, $sql)){
         if(mysqli_num_rows($result) > 0){
             echo "<table class='table table-hover'>";

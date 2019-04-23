@@ -15,9 +15,6 @@ public abstract class BaseEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
-    private short type;
-
     @Column(unique = true)
     @NotBlank(message = "NB")
     private String login;
@@ -38,14 +35,6 @@ public abstract class BaseEntity implements UserDetails {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public short getType() {
-        return type;
-    }
-
-    public void setType(short type) {
-        this.type = type;
     }
 
     public String getLogin() {

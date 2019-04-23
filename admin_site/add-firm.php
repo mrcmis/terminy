@@ -15,7 +15,7 @@ function generateCodedName($link, $db_name) {
     while (true) {
         $coded_name = generateRandomString(6);
 
-        $sql = "SELECT 1 FROM $db_name.firm WHERE coded_name = ?";
+        $sql = "SELECT 1 FROM $db_name.company WHERE coded_name = ?";
 
         if($stmt = mysqli_prepare($link, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $param_coded_name);
@@ -32,6 +32,34 @@ function generateCodedName($link, $db_name) {
         }
     }
     return $coded_name;
+}
+
+function set_privileges($link, $db_name, $company_id) {
+    $sql = "INSERT INTO $db_name.privilege(privilege) VALUES ('COMPANY')";
+    if($stmt = mysqli_prepare($link, $sql)){
+        if(mysqli_stmt_execute($stmt)) {
+            $sql = "SELECT LAST_INSERT_ID()";
+            if($stmt = mysqli_prepare($link, $sql)){
+                if(mysqli_stmt_execute($stmt)) {
+                    mysqli_stmt_store_result($stmt);       
+                    mysqli_stmt_bind_result($stmt, $privilege_id);
+                    mysqli_stmt_fetch($stmt);
+
+                    $sql = "INSERT into $db_name.user_privilege(user_id, privilege_id) values(?,?)";
+                    if($stmt = mysqli_prepare($link, $sql)){
+                        mysqli_stmt_bind_param($stmt, "dd", $company_id, $privilege_id);
+                        if(!mysqli_stmt_execute($stmt)) {
+                            echo "Błąd! Spróbuj później.";
+                        }
+                    } else {
+                        echo "Błąd! Spróbuj później.";
+                    }
+                } else {
+                    echo "Błąd! Spróbuj później.";
+                }
+            }
+        }
+    }
 }
 
 session_start();
@@ -78,7 +106,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if(empty($login_err) && empty($email_err) && empty($phone_err)) {
 
-        $sql = "INSERT INTO $db_name.base_entity(login, password, type) VALUES(?, ?, 1)";
+        $sql = "INSERT INTO $db_name.base_entity(login, password) VALUES(?, ?)";
 
         if($stmt = mysqli_prepare($link, $sql)){
             mysqli_stmt_bind_param($stmt, "ss", $param_login, $param_password);
@@ -105,7 +133,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                         $mail_notification = isset($_POST['feature-mail-notification']) ? 1 : 0;
                         $reports_generation = isset($_POST['feature-reports-generation']) ? 1 : 0;
 
-                        $sql = "INSERT INTO $db_name.firm(id, name, coded_name, mail, phone, blocking_users, mail_notification, reports_generation) 
+                        $sql = "INSERT INTO $db_name.company(id, name, coded_name, mail, phone, blocking_users, mail_notification, reports_generation) 
                         VALUES(?, ?, ?, ?, ?, $blocking_users, $mail_notification, $reports_generation)";
 
                         if($stmt = mysqli_prepare($link, $sql)){
@@ -120,6 +148,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                         } else {
                             echo "Błąd! Spróbuj później.";
                         }
+
+                        set_privileges($link, $db_name, $id);
                     }
                 }
             } else{
