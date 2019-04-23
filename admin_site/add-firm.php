@@ -112,7 +112,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_bind_param($stmt, "ss", $param_login, $param_password);
             
             $param_login = $login;
-            $param_password = generateRandomString();
+            $random_password = generateRandomString();
+            $hashed_password = password_hash($random_password, PASSWORD_DEFAULT);
+            $param_password = str_replace("$2y$", "$2a$", "$hashed_password"); // CONVERSION TO SPRING
 
             if(mysqli_stmt_execute($stmt)) {
                 $sql = "SELECT id FROM $db_name.base_entity WHERE login = ?";

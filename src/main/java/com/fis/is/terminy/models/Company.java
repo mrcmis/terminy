@@ -38,12 +38,6 @@ public class Company extends BaseEntity {
     @NotNull
     private boolean blockingUsers;
 
-    //TODO
-    @Override
-    public String getPassword() {
-        return new BCryptPasswordEncoder().encode(new String("company"));
-    }
-
     public String getPhone() {
         return phone;
     }
