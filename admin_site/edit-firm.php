@@ -10,6 +10,67 @@ function generateRandomString($length = 5) {
     return $random_string;
 }
 
+function set_privileges($link, $db_name, $company_id, $privilege_name) {
+    $sql = "INSERT INTO $db_name.privilege(privilege) VALUES ('" . $privilege_name . "')";
+    if($stmt = mysqli_prepare($link, $sql)){
+        if(mysqli_stmt_execute($stmt)) {
+            $sql = "SELECT LAST_INSERT_ID()";
+            if($stmt = mysqli_prepare($link, $sql)){
+                if(mysqli_stmt_execute($stmt)) {
+                    mysqli_stmt_store_result($stmt);       
+                    mysqli_stmt_bind_result($stmt, $privilege_id);
+                    mysqli_stmt_fetch($stmt);
+
+                    $sql = "INSERT into $db_name.user_privilege(user_id, privilege_id) values(?,?)";
+                    if($stmt = mysqli_prepare($link, $sql)){
+                        mysqli_stmt_bind_param($stmt, "dd", $company_id, $privilege_id);
+                        if(!mysqli_stmt_execute($stmt)) {
+                            echo "Błąd! Spróbuj później.";
+                        }
+                    } else {
+                        echo "Błąd! Spróbuj później.";
+                    }
+                } else {
+                    echo "Błąd! Spróbuj później.";
+                }
+            }
+        }
+    }
+}
+
+function remove_privileges($link, $db_name, $company_id, $privilege_name) {
+    $sql = "SELECT id from $db_name.privilege p JOIN $db_name.user_privilege up ON p.id=up.privilege_id WHERE privilege='" . $privilege_name . "'
+            AND user_id=" . $company_id;
+    if($stmt = mysqli_prepare($link, $sql)){
+        if(mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_store_result($stmt);       
+            mysqli_stmt_bind_result($stmt, $privilege_id);
+            mysqli_stmt_fetch($stmt);
+
+            $sql = "DELETE FROM $db_name.user_privilege WHERE privilege_id=?";
+            if($stmt = mysqli_prepare($link, $sql)){
+                mysqli_stmt_bind_param($stmt, "d", $privilege_id);
+                if(mysqli_stmt_execute($stmt)) {
+                    $sql = "DELETE FROM $db_name.privilege WHERE id = ?";
+                    if($stmt = mysqli_prepare($link, $sql)){
+                        mysqli_stmt_bind_param($stmt, "d", $privilege_id);
+                        if(!mysqli_stmt_execute($stmt)) {
+                            echo "Błąd! Spróbuj później.";
+                        }
+                    }
+                }
+                else {
+                    echo "Błąd! Spróbuj później.";
+                }
+            } else {
+                echo "Błąd! Spróbuj później.";
+            }
+        } else {
+            echo "Błąd! Spróbuj później.";
+        }
+    }
+}
+
 session_start();
  
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
@@ -107,6 +168,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         $new_reports_generation = isset($_POST['feature-reports-generation']) ? 1 : 0;
 
         if($new_blocking_users != $blocking_users) {
+            if($new_blocking_users == 0) {
+                remove_privileges($link, $db_name, $id, 'BLOCKING_USERS');
+            }
+            else {
+                set_privileges($link, $db_name, $id, 'BLOCKING_USERS');
+            }
+
             $sql = "UPDATE $db_name.company SET blocking_users=? WHERE id=?";
             if($stmt = mysqli_prepare($link, $sql)){
                 mysqli_stmt_bind_param($stmt, "dd", $new_blocking_users, $id);
@@ -119,6 +187,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         if($new_mail_notification != $mail_notification) {
+            if($new_mail_notification == 0) {
+                remove_privileges($link, $db_name, $id, 'MAIL_NOTIFICATION');
+            }
+            else {
+                set_privileges($link, $db_name, $id, 'MAIL_NOTIFICATION');
+            }
+
             $sql = "UPDATE $db_name.company SET mail_notification=? WHERE id=?";
             if($stmt = mysqli_prepare($link, $sql)){
                 mysqli_stmt_bind_param($stmt, "dd", $new_mail_notification, $id);
@@ -131,6 +206,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         if($new_reports_generation != $reports_generation) {
+            if($new_reports_generation == 0) {
+                remove_privileges($link, $db_name, $id, 'REPORTS_GENERATION');
+            }
+            else {
+                set_privileges($link, $db_name, $id, 'REPORTS_GENERATION');
+            }
+
             $sql = "UPDATE $db_name.company SET reports_generation=? WHERE id=?";
             if($stmt = mysqli_prepare($link, $sql)){
                 mysqli_stmt_bind_param($stmt, "dd", $new_reports_generation, $id);

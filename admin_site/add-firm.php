@@ -34,8 +34,8 @@ function generateCodedName($link, $db_name) {
     return $coded_name;
 }
 
-function set_privileges($link, $db_name, $company_id) {
-    $sql = "INSERT INTO $db_name.privilege(privilege) VALUES ('COMPANY')";
+function set_privileges($link, $db_name, $company_id, $privilege_name) {
+    $sql = "INSERT INTO $db_name.privilege(privilege) VALUES ('" . $privilege_name . "')";
     if($stmt = mysqli_prepare($link, $sql)){
         if(mysqli_stmt_execute($stmt)) {
             $sql = "SELECT LAST_INSERT_ID()";
@@ -192,7 +192,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                             echo "Błąd! Spróbuj później.";
                         }
 
-                        set_privileges($link, $db_name, $id);
+                        set_privileges($link, $db_name, $id, 'COMPANY');
+                        if($blocking_users == 1)
+                            set_privileges($link, $db_name, $id, 'BLOCKING_USERS');
+                        if($mail_notification == 1)
+                            set_privileges($link, $db_name, $id, 'MAIL_NOTIFICATION');
+                        if($reports_generation == 1)
+                            set_privileges($link, $db_name, $id, 'REPORTS_GENERATION');
                     }
                 }
             } else{
