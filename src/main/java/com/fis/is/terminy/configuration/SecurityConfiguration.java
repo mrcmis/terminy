@@ -1,6 +1,6 @@
 package com.fis.is.terminy.configuration;
 
-import com.fis.is.terminy.controllers.MyUrlAuthenticationSuccessHandler;
+import com.fis.is.terminy.controllers.UrlAuthenticationSuccessHandler;
 import com.fis.is.terminy.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
-        return new MyUrlAuthenticationSuccessHandler();
+        return new UrlAuthenticationSuccessHandler();
     }
 
     @Override
