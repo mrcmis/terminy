@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.security.Principal;
 
 @Controller
-public class HomeController {
-    @GetMapping("home")
+public class HomeUserController {
+    @GetMapping("homeUser")
     public String home(Principal principal, Model model){
         model.addAttribute("user", principal.getName());
 
         BaseEntity a = (BaseEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println(" INJECTED CLASS ->>>>>>>>>>>> :"+ a.getClass().getName());
 
-        return "home";
+        return "homeUser";
     }
 }

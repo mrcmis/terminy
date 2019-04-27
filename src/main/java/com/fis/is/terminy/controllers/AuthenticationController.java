@@ -15,7 +15,7 @@ import javax.validation.Valid;
 public class AuthenticationController {
 
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     @GetMapping("/register")
     public String register(Model model){
@@ -31,7 +31,7 @@ public class AuthenticationController {
             return "register";
         }
         clientRepository.saveModifiedClient(client);
-        return "home";
+        return "login";
     }
 
     @GetMapping("/login")
