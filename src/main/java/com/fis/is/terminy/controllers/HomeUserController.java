@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import java.security.Principal;
 
 @Controller
-public class HomeController {
-    @GetMapping("home")
+public class HomeUserController {
+    @GetMapping("homeUser")
     public String home(Principal principal, @SessionAttribute("company") Company company, Model model){
         model.addAttribute("user", principal.getName());
 
@@ -21,6 +21,6 @@ public class HomeController {
 
         System.out.println("COMPANY IN SESSION ->>>>>>>>>>>> :" + company.getName());
 
-        return "home";
+        return "homeUser";
     }
 }

@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import java.security.Principal;
 
 @Controller
-public class HomeController {
-    @GetMapping("home")
+public class HomeCompanyController {
+    @GetMapping("homeCompany")
     public String home(Principal principal, @SessionAttribute("company") Company company, Model model){
-        model.addAttribute("user", principal.getName());
+        model.addAttribute("company", principal.getName());
 
         BaseEntity a = (BaseEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println(" INJECTED CLASS ->>>>>>>>>>>> :"+ a.getClass().getName());
 
         System.out.println("COMPANY IN SESSION ->>>>>>>>>>>> :" + company.getName());
 
-        return "home";
+        return "homeCompany";
     }
 }

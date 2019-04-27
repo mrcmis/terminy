@@ -22,7 +22,7 @@ import java.util.Optional;
 public class AuthenticationController {
 
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     @Autowired
     CompanyRepository companyRepository;
@@ -68,7 +68,4 @@ public class AuthenticationController {
 
         return "login";
     }
-
-
-
 }
