@@ -1,8 +1,6 @@
 package com.fis.is.terminy.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.sql.Time;
 
 @Entity
 public class CompanyService {
@@ -15,16 +13,13 @@ public class CompanyService {
     private Company company;
 
     @Column(unique = true)
-    @NotBlank(message = "NB")
     private String name;
 
-    @Column(unique = true)
-    @NotBlank(message = "NB")
+    @Column
     private Long price;
 
-    @Column(unique = true)
-    @NotBlank(message = "NB")
-    private Time duration;
+    @Column
+    private Long duration;
 
     public Long getId() {
         return id;
@@ -51,11 +46,11 @@ public class CompanyService {
         this.price = price;
     }
 
-    public Time getDuration() {
+    public Long getDuration() {
         return duration;
     }
 
-    public void setDuration(Time duration) {
+    public void setDuration(Long duration) {
         this.duration = duration;
     }
 

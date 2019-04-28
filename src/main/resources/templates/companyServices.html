@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Zarządzaj usługami</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
 </head>
 <body>
-    <form class="form-horizontal">
+    <form class="form-horizontal" action="#" th:action="@{/homeCompany/companyServices}" th:object="${companyService}" method="post">
         <fieldset>
             <legend style="text-align: center"><h1>Dodaj usługę</h1></legend>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="name">Nazwa</label>
                 <div class="col-md-3">
-                    <input id="name" name="name" type="text" placeholder="Nazwa" class="form-control input-md" required="">
+                    <input id="name" name="name" type="text" placeholder="Nazwa" class="form-control input-md" required="" th:field="*{name}">
                 </div>
             </div>
             <div class="form-group">
@@ -20,15 +20,19 @@
                 <div class="col-md-2">
                     <div class="input-group">
                         <input id="price" name="price" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                               placeholder="Cena" class="form-control" required="">
+                               placeholder="Cena" class="form-control" required="" th:field="*{price}">
                         <span class="input-group-addon" style="width:1px">zł</span>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="time">Czas trwania</label>
-                <div class="col-md-1">
-                    <input id="time" name="time" type="time" class="form-control" required="" style="padding: 0px 8px">
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <input id="time" name="time" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                               placeholder="Czas trwania" class="form-control" required="" th:field="*{duration}">
+                        <span class="input-group-addon" style="width:1px">min</span>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
