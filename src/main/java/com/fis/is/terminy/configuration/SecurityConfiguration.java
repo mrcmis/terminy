@@ -13,8 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
 import javax.sql.DataSource;
 
 
@@ -30,6 +30,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
 
     @Value("${spring.queries.users-query}")
     private String usersQuery;
@@ -63,8 +66,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // form login
                 .csrf().disable().formLogin()
                 .loginPage("/login")
-                .failureUrl("/login?error=true")
                 .successHandler(myAuthenticationSuccessHandler())
+                .failureHandler(authenticationFailureHandler)
+                //.failureUrl("/login?error=true")
                 .usernameParameter("login")
                 .passwordParameter("password")
                 .and()
