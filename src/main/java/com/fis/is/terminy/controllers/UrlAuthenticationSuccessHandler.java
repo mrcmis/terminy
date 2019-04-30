@@ -54,9 +54,9 @@ public class UrlAuthenticationSuccessHandler implements AuthenticationSuccessHan
         }
 
         if (isUser) {
-            return "/homeUser";
+            return "/user";
         } else if (isCompany) {
-            return "/homeCompany";
+            return "/company";
         } else {
             throw new IllegalStateException();
         }

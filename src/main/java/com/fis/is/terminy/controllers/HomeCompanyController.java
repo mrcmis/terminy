@@ -12,7 +12,7 @@ import java.security.Principal;
 
 @Controller
 public class HomeCompanyController {
-    @GetMapping("homeCompany")
+    @GetMapping("company")
     public String home(Principal principal, @SessionAttribute("company") Company company, Model model){
         model.addAttribute("company", principal.getName());
 

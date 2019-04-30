@@ -6,9 +6,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
 </head>
 <body>
-    <form class="form-horizontal" action="#" th:action="@{/homeCompany/companyServices}" th:object="${companyService}" method="post">
+    <form class="form-horizontal" action="#" th:action="@{/company/companyServices}" th:object="${companyService}" method="post">
         <fieldset style="text-align: center;">
             <legend style=" width:60%; margin:auto; margin-bottom:15px;"><h1>Dodaj usługę</h1></legend>
+            <div class="alert alert-danger" th:if="${param.error}">
+                Usługa o podanej nazwie już istnieje!
+            </div>
+            <div class="alert alert-success" th:if="${param.added}">
+                Poprawnie dodano usługę!
+            </div>
+            <div class="alert alert-success" th:if="${param.deleted}">
+                Usługa została usunięta!
+            </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="name">Nazwa</label>
                 <div class="col-md-3">
@@ -31,7 +40,7 @@
                     <div class="input-group">
                         <input id="time" name="time" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
                                placeholder="Czas trwania" class="form-control" required="" th:field="*{duration}">
-                        <span class="input-group-addon" style="width:1px">min</span>
+                        <span class="input-group-addon" style="width:1px">min.</span>
                     </div>
                 </div>
             </div>
@@ -56,7 +65,12 @@
                 <td th:text="${service.name}">...</td>
                 <td th:text="${service.duration} + ' min.'">...</td>
                 <td th:text="${service.price} + 'zł'">...</td>
-                <td><a class="btn btn-link">Usuń</a></td>
+                <td>
+                    <form action="#" th:action="@{/company/companyServices/delete/__${service.id}__}" th:method="delete" >
+                        <input type="hidden" name="_method" value="delete" />
+                        <button type="submit" class="btn btn-link">Usuń</button>
+                    </form>
+                </td>
             </tr>
         </th:block>
     </table>
