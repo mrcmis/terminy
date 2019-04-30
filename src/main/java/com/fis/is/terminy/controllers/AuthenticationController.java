@@ -41,7 +41,7 @@ public class AuthenticationController {
             return "register";
         }
         clientRepository.saveModifiedClient(client);
-        return "login";
+        return "redirect:/login";
     }
 
     @GetMapping("/login")

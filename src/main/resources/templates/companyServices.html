@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Zarządzaj usługami</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+</head>
+<body>
+    <form class="form-horizontal" action="#" th:action="@{/company/companyServices}" th:object="${companyService}" method="post">
+        <fieldset style="text-align: center;">
+            <legend style=" width:60%; margin:auto; margin-bottom:15px;"><h1>Dodaj usługę</h1></legend>
+            <div class="alert alert-danger" th:if="${param.error}">
+                Usługa o podanej nazwie już istnieje!
+            </div>
+            <div class="alert alert-success" th:if="${param.added}">
+                Poprawnie dodano usługę!
+            </div>
+            <div class="alert alert-success" th:if="${param.deleted}">
+                Usługa została usunięta!
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Nazwa</label>
+                <div class="col-md-3">
+                    <input id="name" name="name" type="text" placeholder="Nazwa" class="form-control input-md" required="" th:field="*{name}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="price">Cena</label>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <input id="price" name="price" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                               placeholder="Cena" class="form-control" required="" th:field="*{price}">
+                        <span class="input-group-addon" style="width:1px">zł</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="time">Czas trwania</label>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <input id="time" name="time" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                               placeholder="Czas trwania" class="form-control" required="" th:field="*{duration}">
+                        <span class="input-group-addon" style="width:1px">min.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="add"></label>
+                <div class="col-md-4">
+                    <button id="add" name="add" class="btn btn-primary">Dodaj</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <table class="table table-hover" style="width:80%; margin:auto;">
+        <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Czas trwania</th>
+            <th>Cena</th>
+        </tr>
+        </thead>
+        <th:block th:each="service : ${servicesList}">
+            <tr style="text-align: left;">
+                <td th:text="${service.name}">...</td>
+                <td th:text="${service.duration} + ' min.'">...</td>
+                <td th:text="${service.price} + 'zł'">...</td>
+                <td>
+                    <form action="#" th:action="@{/company/companyServices/delete/__${service.id}__}" th:method="delete" >
+                        <input type="hidden" name="_method" value="delete" />
+                        <button type="submit" class="btn btn-link">Usuń</button>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+    </table>
+
+</body>
+</html>
