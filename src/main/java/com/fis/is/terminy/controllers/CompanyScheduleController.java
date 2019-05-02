@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 
 
@@ -49,14 +50,14 @@ public class CompanyScheduleController {
         return "redirect:/company/companySchedule?added=true";
     }
 
-    boolean isRowInDB(CompanySchedule companySchedule)
+    private boolean isRowInDB(CompanySchedule companySchedule)
     {
         if(companyScheduleRepository.findByCompanyIdAndDay(companySchedule.getCompany().getId(), companySchedule.getDay()).isPresent())
             return true;
         return false;
     }
 
-    boolean isDayValid(CompanySchedule companySchedule)
+    private boolean isDayValid(CompanySchedule companySchedule)
     {
         String[] days = {"Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"};
 
