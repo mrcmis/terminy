@@ -35,12 +35,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         BaseEntity logged;
         Optional<Client> optionalClient = clientRepository.findByLogin(login);
+        Optional<Company> optionalCompany = companyRepository.findByLogin(login);
 
         if (optionalClient.isPresent()) {
             logged = optionalClient.get();
-        } else {
-            Optional<Company> optionalCompany = companyRepository.findByLogin(login);
+        } else if (optionalCompany.isPresent()){
             logged = optionalCompany.get();
+        } else{
+            throw new UsernameNotFoundException("Login not found");
         }
 
         //TODO
