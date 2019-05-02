@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label" for="price">Godzina początkowa</label>
+                <label class="col-md-4 control-label" for="time_start">Godzina początkowa</label>
                 <div class="col-md-2">
                     <div class="input-group">
                         <input id="time_start" name="time" type="time" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label" for="time">Godzina końcowa</label>
+                <label class="col-md-4 control-label" for="time_end">Godzina końcowa</label>
                 <div class="col-md-2">
                     <div class="input-group">
                         <input id="time_end" name="time" type="time" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
@@ -68,6 +68,12 @@
                 <td th:text="${day.day}">...</td>
                 <td th:text="${day.start_hour}">...</td>
                 <td th:text="${day.end_hour}">...</td>
+                <td>
+                    <form action="#" th:action="@{/company/companySchedule/delete/__${day.id}__}" th:method="delete" >
+                        <input type="hidden" name="_method" value="delete" />
+                        <button type="submit" class="btn btn-link">Usuń</button>
+                    </form>
+                </td>
             </tr>
         </th:block>
     </table>

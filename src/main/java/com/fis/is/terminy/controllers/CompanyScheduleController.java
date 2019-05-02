@@ -50,6 +50,16 @@ public class CompanyScheduleController {
         return "redirect:/company/companySchedule?added=true";
     }
 
+    @DeleteMapping("company/companySchedule/delete/{dayId}")
+    public String deleteWorkingDay(@PathVariable(value = "dayId") Long dayId)
+    {
+        Company currentCompany = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<CompanySchedule> companySchedule = companyScheduleRepository.findByIdAndCompanyId(dayId, currentCompany.getId());
+        companyScheduleRepository.delete(companySchedule.get());
+        return "redirect:/company/companySchedule?deleted=true";
+    }
+
+
     private boolean isRowInDB(CompanySchedule companySchedule)
     {
         if(companyScheduleRepository.findByCompanyIdAndDay(companySchedule.getCompany().getId(), companySchedule.getDay()).isPresent())
