@@ -4,16 +4,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.groups.Default;
 
 @Entity
 public class Client extends BaseEntity {
     @Column
-    @NotBlank(message = "NB")
+    @NotBlank(message = "NB", groups = {editEntity.class, Default.class})
     private String phone;
 
     @Column(unique = true)
-    @NotBlank(message = "NB")
-    @Email
+    @NotBlank(message = "NB", groups = {editEntity.class, Default.class})
+    @Email(groups = editEntity.class)
     private String mail;
 
     @Column
