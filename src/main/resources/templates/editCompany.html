@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="resources/style.css">
+    <link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+<div id = "main">
+    <form class="w3-container" action="#" th:action="@{/editCompany}" th:object="${company}" method="post">
+
+        <label class="w3-text-red"><b>Email</b></label>
+        <input class="w3-input w3-border" type="text" name="mail" th:field="*{mail}">
+        <p class="alert alert-danger" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p>
+
+        <label class="w3-text-red"><b>Name</b></label>
+        <input class="w3-input w3-border" type="text" name="name" th:field="*{name}">
+        <p class="alert alert-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+
+        <label class="w3-text-red"><b>Phone</b></label>
+        <input class="w3-input w3-border" type="text" name="phone" th:field="*{phone}">
+        <p class="alert alert-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
+
+        <button class="w3-btn w3-red" type="submit" id="button_submit">Edit</button>
+
+    </form>
+
+</div>
+</body>
+</html>
