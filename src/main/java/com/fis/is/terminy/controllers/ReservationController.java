@@ -75,9 +75,8 @@ public class ReservationController {
     @GetMapping("user/reservation/add/{id}")
     public String saveReservation(@PathVariable(value = "id") int id)
     {
-        reservationsToSave.setStart_hour(reservationUnits.get(id-1).getStart_hour().plusMinutes(60));
-        reservationsToSave.setEnd_hour(reservationUnits.get(id-1).getEnd_hour().plusMinutes(60));
-        System.out.println(reservationUnits.get(id).getStart_hour()+ "  " + reservationUnits.get(id).getEnd_hour());
+        reservationsToSave.setStart_hour(reservationUnits.get(id-1).getStart_hour());
+        reservationsToSave.setEnd_hour(reservationUnits.get(id-1).getEnd_hour());
         try
         {
             reservationsRepository.save(reservationsToSave);
@@ -97,21 +96,20 @@ public class ReservationController {
         reservationsToSave.setDate(calendar.getDate().plusDays(1));
         CompanyService companyService = companyServiceRepository.findByIdAndCompanyId(serviceId,companyId).get();
         Optional<CompanySchedule> companyScheduleOptional = companyScheduleRepository.findByCompanyIdAndDay(companyId, calendar.getDayName());
-        List<Reservations> reservations = reservationsRepository.findAllByCompanyIdAndDate(companyId, calendar.getDate());
+        List<Reservations> reservations = reservationsRepository.findAllByCompanyIdAndDate(companyId, reservationsToSave.getDate());
 
         if(!companyScheduleOptional.isPresent())
             return "redirect:/user/reservation?error=true";
 
         CompanySchedule companySchedule = companyScheduleOptional.get();
-        calendar.setStart_hour(companySchedule.getStart_hour());
-        calendar.setEnd_hour(companySchedule.getEnd_hour());
+        calendar.setStart_hour(companySchedule.getStart_hour().minusMinutes(60));
+        calendar.setEnd_hour(companySchedule.getEnd_hour().minusMinutes(60));
 
         reservationUnits = allAvailableReservationUnitList(calendar,reservations, companyService.getDuration());
 
         if(reservationUnits.get(reservationUnits.size() - 1).getEnd_hour().isAfter(calendar.getEnd_hour()) )
             reservationUnits.remove(reservationUnits.size() - 1);
 
-        System.out.println(reservationUnits.size());
         model.addAttribute("reservationsList", reservationUnits);
 
 
@@ -121,7 +119,7 @@ public class ReservationController {
 
     private ArrayList<ReservationUnit> allAvailableReservationUnitList(Calendar calendar, List<Reservations> reservations, Long duration)
     {
-        ArrayList<ReservationUnit> reservationUnits = new ArrayList<ReservationUnit>();
+        ArrayList<ReservationUnit> reservationUnits = new ArrayList<>();
 
         LocalTime start = calendar.getStart_hour();
         LocalTime end = start.plusMinutes(duration);
@@ -130,9 +128,10 @@ public class ReservationController {
         while(start.isBefore(calendar.getEnd_hour()) || start.equals(calendar.getEnd_hour()))
         {
             boolean canBeAdded = true;
-            for (Reservations reservation: reservations)
+            System.out.println("/t" + id + "/t");
+            for (Reservations reservation : reservations)
             {
-                if(!canBeReserved(start,end, calendar.getStart_hour(), calendar.getEnd_hour()))
+                if(!canBeReserved(start,end, reservation.getStart_hour(), reservation.getEnd_hour()))
                 {
                     canBeAdded = false;
                     break;
@@ -154,9 +153,17 @@ public class ReservationController {
 
     private boolean canBeReserved(LocalTime start, LocalTime end, LocalTime rstart, LocalTime rend)
     {
-        if(start.isAfter(rstart) && end.isBefore(rend))
+        if(start.isAfter(rstart) && end .isBefore(rend))
             return false;
         if (start.equals(rstart) && end.equals(rend))
+            return false;
+        if(start.equals(rstart) && end.isBefore(rend))
+            return false;
+        if(start.isAfter(rstart) && end.equals(rend))
+            return false;
+        if(start.isBefore(rstart) && end.isAfter(rstart))
+            return false;
+        if(start.isBefore(rend) && end.isAfter(rend))
             return false;
         return true;
     }
