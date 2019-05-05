@@ -6,6 +6,29 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
 </head>
 <body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Terminy</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="homeCompany.html"><span class="glyphicon glyphicon-list"></span> Twoje usługi</a></li>
+                <li><a href="companyAccount.html"><span class="glyphicon glyphicon-user"></span> Twoje konto</a></li>
+                <li><a href="companySchedule.html"><span class="glyphicon glyphicon-calendar"></span> Kalendarz</a></li>
+                <li class="active"><a href="companyServices.html><span class="glyphicon glyphicon-plus"></span> Dodaj usługę</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Wyloguj</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
     <form class="form-horizontal" action="#" th:action="@{/company/companyServices}" th:object="${companyService}" method="post">
         <fieldset style="text-align: center;">
             <legend style=" width:60%; margin:auto; margin-bottom:15px;"><h1>Dodaj usługę</h1></legend>
