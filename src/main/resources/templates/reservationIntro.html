@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+</head>
+<body>
+<table class="table table-hover" style="width:80%; margin:auto;">
+    <thead>
+    <tr>
+        <th>Nazwa</th>
+    </tr>
+    </thead>
+        <th:block th:each="company : ${companyList}">
+            <tr style="text-align: left;">
+                <td th:text="${company.name}">...</td>
+                <td>
+                    <form action="#" th:action="@{/user/reservationIntro/company/__${company.id}__}" th:method="get" >
+                        <button type="submit" class="btn btn-link">Wybierz</button>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+</table>
+<br/><br/><br/>
+
+<table class="table table-hover" style="width:80%; margin:auto;">
+    <thead>
+    <tr>
+        <th>Usługa</th>
+        <th>Czas trwania(w minutach)</th>
+        <th>Cena</th>
+    </tr>
+    </thead>
+        <th:block th:each="service : ${serviceList}">
+            <tr style="text-align: left;">
+                <td th:text="${service.name}">...</td>
+                <td th:text="${service.duration}">...</td>
+                <td th:text="${service.price}">...</td>
+                <td>
+                    <form action="#" th:action="@{/user/reservationIntro/service/__${service.id}__}" th:method="get" >
+                        <button type="submit" class="btn btn-link">Wybierz</button>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+</table>
+</body>
+</html>
