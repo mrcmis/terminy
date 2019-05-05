@@ -43,22 +43,9 @@
         <h1>Twoje usługi</h1>
     </div>
 
-    <table class="table table-hover" style="width:80%; margin:auto;">
-        <thead>
-        <tr>
-            <th>Nazwa</th>
-            <th>Czas trwania</th>
-            <th>Cena</th>
-        </tr>
-        </thead>
-        <th:block th:each="service : ${servicesList}">
-            <tr style="text-align: left;">
-                <td th:text="${service.name}">...</td>
-                <td th:text="${service.duration} + ' min.'">...</td>
-                <td th:text="${service.price} + 'zł'">...</td>
-            </tr>
-        </th:block>
-    </table>
+    <div>
+        <h3>tu pojawią się zarezerwowane usługi.</h3>h3>
+    </div>
 </div>
 </body>
 </html>
