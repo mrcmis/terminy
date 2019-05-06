@@ -8,19 +8,20 @@
 </head>
 <body>
 <div id = "main">
-    <form class="w3-container" action="#" th:action="@{/login}" method="post">
+    <form class="w3-container w3-DimGrey" action="#" th:action="@{/login}" method="post">
 
-        <label class="w3-text-red"><b>Login</b></label>
+        <label class="w3-text-white"><br><b>Logowanie</b><br></label>
+        <label class="w3-text-white"><br><br><b>Login</b><br></label>
         <input class="w3-input w3-border" type="text" name="login" th:placeholder="login" id="login">
 
-        <label class="w3-text-red"><b>Password</b></label>
-        <input class="w3-input w3-border" type="password" name="password" th:placeholder="password" id="password">
+        <label class="w3-text-white"><b>Password</b><br><br></label>
+        <input class="w3-input w3-border" type="password" name="password" th:placeholder="password" id="password"><br>
 
         <div align="center" th:if="${param.error}">
             <p style="font-size: 20; color: #FF1C19;">Email or Password is invalid.</p>
         </div>
 
-        <button class="w3-btn w3-red" type="submit" id="button_submit">Login</button>
+        <button class="w3-button w3-round-xxlarge w3-teal" type="submit" id="button_submit">Login</button>
 
     </form>
 
