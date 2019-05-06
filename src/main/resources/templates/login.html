@@ -15,13 +15,13 @@
         <input class="w3-input w3-border" type="text" name="login" th:placeholder="login" id="login">
 
         <label class="w3-text-white"><b>Password</b><br><br></label>
-        <input class="w3-input w3-border" type="password" name="password" th:placeholder="password" id="password">
+        <input class="w3-input w3-border" type="password" name="password" th:placeholder="password" id="password"><br>
 
         <div align="center" th:if="${param.error}">
             <p style="font-size: 20; color: #FF1C19;">Email or Password is invalid.</p>
         </div>
 
-        <button class="w3-button w3-round-xxlarge w3-teal" type="submit" id="button_submit"><br>Login</button>
+        <button class="w3-button w3-round-xxlarge w3-teal" type="submit" id="button_submit">Login</button>
 
     </form>
 
