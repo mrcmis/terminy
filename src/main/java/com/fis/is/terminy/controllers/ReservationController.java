@@ -1,22 +1,21 @@
 package com.fis.is.terminy.controllers;
 
 import com.fis.is.terminy.models.*;
-import com.fis.is.terminy.repositories.CompanyRepository;
 import com.fis.is.terminy.repositories.CompanyScheduleRepository;
 import com.fis.is.terminy.repositories.CompanyServiceRepository;
 import com.fis.is.terminy.repositories.ReservationsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
-import javax.jws.WebParam;
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,43 +30,33 @@ public class ReservationController {
     private CompanyServiceRepository companyServiceRepository;
     @Autowired
     private CompanyScheduleRepository companyScheduleRepository;
-    @Autowired
-    private CompanyRepository companyRepository;
 
-    private Reservations reservationsToSave = new Reservations();
-    private Long companyId;
+
     private Long serviceId;
+    private Company company;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
     private List<ReservationUnit> reservationUnits;
 
+
     @GetMapping("user/reservationIntro")
-    public String printAllCompanies(Model model, Pageable pageable)
+    public String printAllCompanyServices(Model model, Pageable pageable, @SessionAttribute("company") Company companyInSession)
     {
-        model.addAttribute("companyList", companyRepository.findAll());
-
-        return "reservationIntro";
-    }
-
-    @GetMapping("user/reservationIntro/company/{companyId}")
-    public String printAllCompanyServices(@PathVariable(value = "companyId") Long companyId, Model model, Pageable pageable)
-    {
-        Client currentClient = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        reservationsToSave.setClient(currentClient);
-        this.companyId = companyId;
-        reservationsToSave.setCompany(companyRepository.findById(companyId).get());
-        model.addAttribute("serviceList", companyServiceRepository.findByCompanyId(companyId,pageable).getContent());
+        company = companyInSession;
+        model.addAttribute("serviceList", companyServiceRepository.findByCompanyId(company.getId(),pageable).getContent());
         return "reservationIntro";
     }
 
     @GetMapping("user/reservationIntro/service/{serviceId}")
-    public String showReservation(@PathVariable(value = "serviceId") Long serviceId, Model model, Pageable pageable)
+    public String showReservation(@PathVariable(value = "serviceId") Long serviceId)
     {
         this.serviceId = serviceId;
-        reservationsToSave.setService(companyServiceRepository.findByIdAndCompanyId(serviceId,companyId).get());
         return "redirect:/user/reservation";
     }
 
     @GetMapping("user/reservation")
-    public String getDate(@Valid Calendar calendar, Model model)
+    public String getDate(@Valid Calendar calendar)
     {
         return "reservation";
     }
@@ -75,8 +64,16 @@ public class ReservationController {
     @GetMapping("user/reservation/add/{id}")
     public String saveReservation(@PathVariable(value = "id") int id)
     {
-        reservationsToSave.setStart_hour(reservationUnits.get(id-1).getStart_hour());
-        reservationsToSave.setEnd_hour(reservationUnits.get(id-1).getEnd_hour());
+        Client currentClient = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Reservations reservationsToSave = new Reservations();
+        reservationsToSave.setClient(currentClient);
+        reservationsToSave.setCompany(company);
+        reservationsToSave.setService(companyServiceRepository.findByIdAndCompanyId(serviceId,company.getId()).get());
+        reservationsToSave.setDate(date);
+        reservationsToSave.setStart_hour(reservationUnits.get(id).getStart_hour());
+        reservationsToSave.setEnd_hour(reservationUnits.get(id).getEnd_hour());
+
         try
         {
             reservationsRepository.save(reservationsToSave);
@@ -86,29 +83,28 @@ public class ReservationController {
             return "redirect:/user/reservation?notsaved=true";
         }
 
-        return "redirect:/user/reservation?saved=true";
+        return "redirect:/user";
     }
 
     @PostMapping("user/reservation")
     public String printTerms(@Valid Calendar calendar, Model model)
     {
         System.out.println("DATE "  +  calendar.getDate());
-        reservationsToSave.setDate(calendar.getDate().plusDays(1));
-        CompanyService companyService = companyServiceRepository.findByIdAndCompanyId(serviceId,companyId).get();
-        Optional<CompanySchedule> companyScheduleOptional = companyScheduleRepository.findByCompanyIdAndDay(companyId, calendar.getDayName());
-        List<Reservations> reservations = reservationsRepository.findAllByCompanyIdAndDate(companyId, reservationsToSave.getDate());
+        date = calendar.getDate();
+        CompanyService companyService = companyServiceRepository.findByIdAndCompanyId(serviceId,company.getId()).get();
+        Optional<CompanySchedule> companyScheduleOptional = companyScheduleRepository.findByCompanyIdAndDay(company.getId(), calendar.getDayName());
+        List<Reservations> reservations = reservationsRepository.findAllByCompanyIdAndDate(company.getId(), date);
 
         if(!companyScheduleOptional.isPresent())
             return "redirect:/user/reservation?error=true";
 
         CompanySchedule companySchedule = companyScheduleOptional.get();
-        calendar.setStart_hour(companySchedule.getStart_hour().minusMinutes(60));
-        calendar.setEnd_hour(companySchedule.getEnd_hour().minusMinutes(60));
+        calendar.setStart_hour(companySchedule.getStart_hour());
+        calendar.setEnd_hour(companySchedule.getEnd_hour());
 
         reservationUnits = allAvailableReservationUnitList(calendar,reservations, companyService.getDuration());
 
-        if(reservationUnits.get(reservationUnits.size() - 1).getEnd_hour().isAfter(calendar.getEnd_hour()) )
-            reservationUnits.remove(reservationUnits.size() - 1);
+
 
         model.addAttribute("reservationsList", reservationUnits);
 
@@ -123,7 +119,7 @@ public class ReservationController {
 
         LocalTime start = calendar.getStart_hour();
         LocalTime end = start.plusMinutes(duration);
-        int id = 1;
+        int id = 0;
 
         while(start.isBefore(calendar.getEnd_hour()) || start.equals(calendar.getEnd_hour()))
         {
