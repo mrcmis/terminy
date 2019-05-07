@@ -35,26 +35,25 @@
         </div>
 
     </fieldset>
-
-    <table class="table table-hover" style="width:80%; margin:auto;">
-        <thead>
-        <tr>
-            <th>Godzina początkowa</th>
-            <th>Godzina końcowa</th>
-        </tr>
-        </thead>
-        <th:block th:each="reservation : ${reservationsList}">
-            <tr style="text-align: left;">
-                <td th:text="${reservation.start_hour}">...</td>
-                <td th:text="${reservation.end_hour}">...</td>
-                <td>
-                    <form action="#" th:action="@{/user/reservation/add/__${reservation.id}__}" th:method="get" >
-                        <button type="submit" class="btn btn-link">Zarezerwuj</button>
-                    </form>
-                </td>
-            </tr>
-        </th:block>
-    </table>
 </form>
+<table class="table table-hover" style="width:80%; margin:auto;">
+    <thead>
+    <tr>
+        <th>Godzina początkowa</th>
+        <th>Godzina końcowa</th>
+    </tr>
+    </thead>
+    <th:block th:each="reservation : ${reservationsList}">
+        <tr style="text-align: left;">
+            <td th:text="${reservation.start_hour}">...</td>
+            <td th:text="${reservation.end_hour}">...</td>
+            <td>
+                <form  action="#" th:action="@{/user/reservation/add/__${reservation.id}__}" th:method="get" >
+                    <button type="submit" class="btn btn-link">Zarezerwuj</button>
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</table>
 </body>
 </html>
