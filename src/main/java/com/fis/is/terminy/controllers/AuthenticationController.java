@@ -5,6 +5,9 @@ import com.fis.is.terminy.models.Company;
 import com.fis.is.terminy.repositories.ClientRepository;
 import com.fis.is.terminy.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -46,6 +49,12 @@ public class AuthenticationController {
 
     @GetMapping("/login")
     public String login(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            return "redirect:home";
+        }
+
         Client client = new Client();
         model.addAttribute("client", client);
         model.addAttribute("company", new Company());
@@ -55,6 +64,12 @@ public class AuthenticationController {
 
     @GetMapping(value = "/login/{codedCompany}")
     public String login(Model model, @PathVariable("codedCompany") String codedCompany){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            return "redirect:home";
+        }
+
         Client client = new Client();
         model.addAttribute("client", client);
 
