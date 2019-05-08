@@ -22,6 +22,11 @@ public class Privilege implements GrantedAuthority {
         return privilege;
     }
 
+    @Override
+    public String toString(){
+        return privilege;
+    }
+
     public int getId() {
         return id;
     }
