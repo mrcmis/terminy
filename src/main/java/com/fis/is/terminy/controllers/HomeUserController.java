@@ -18,7 +18,7 @@ public class HomeUserController {
 
         BaseEntity a = (BaseEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println(" INJECTED CLASS ->>>>>>>>>>>> :"+ a.getClass().getName());
-        return "home";
+        return "homeUser";
     }
 
 }

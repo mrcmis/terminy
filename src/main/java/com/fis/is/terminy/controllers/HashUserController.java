@@ -21,7 +21,7 @@ public class HashUserController {
 
         System.out.println("COMPANY IN SESSION ->>>>>>>>>>>> :" + company.getName());
 
-        return "homeUser";
+        return "reservationIntro";
     }
 
 }
