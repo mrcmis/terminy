@@ -90,4 +90,9 @@ public abstract class BaseEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return grantedPrivileges;
     }
+
+    /**
+     * marker interface used to limit validation while editing user
+     */
+    public interface editEntity{}
 }

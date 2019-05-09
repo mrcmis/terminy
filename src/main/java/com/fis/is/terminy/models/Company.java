@@ -7,19 +7,20 @@ import javax.persistence.Entity;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 
 @Entity
 public class Company extends BaseEntity {
     @Column
-    @NotBlank(message = "NB")
+    @NotBlank(message = "NB", groups = {editEntity.class, Default.class})
     private String phone;
 
-    @NotBlank(message = "NB")
-    @Email
+    @NotBlank(message = "NB", groups = {editEntity.class, Default.class})
+    @Email(groups = editEntity.class)
     private String mail;
 
     @Column
-    @NotBlank(message = "NB")
+    @NotBlank(message = "NB", groups = {editEntity.class, Default.class})
     private String name;
 
     @Column

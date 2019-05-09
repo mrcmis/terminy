@@ -61,6 +61,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/home/**").hasAnyAuthority("USER", "COMPANY")
                 .antMatchers("/user/**").hasAnyAuthority("USER")
                 .antMatchers("/company/**").hasAnyAuthority("COMPANY")
+                .antMatchers("/editClient").hasAnyAuthority("USER")
+                .antMatchers("/editCompany").hasAnyAuthority("COMPANY")
                 .anyRequest().authenticated()
                 .and()
                 // form login
@@ -75,14 +77,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // logout
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/").and()
+                .logoutSuccessUrl("/login").and()
                 .exceptionHandling()
                 .accessDeniedPage("/access-denied");
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "resources/static/**");
+        web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "resources/static/**", "/favicon.ico");
     }
 
 }

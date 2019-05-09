@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Terminy - User Page</title>
-
+    <title>Terminy - rezerwacja usługi</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -27,8 +26,8 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/user"><span class="glyphicon glyphicon-list"></span> Home</a></li>
-                <li><a href="/user/reservationIntro/service/__${service.id}__"><span class="glyphicon glyphicon-plus"></span> Zarezerwuj usługę</a></li>
+                <li><a href="/user"><span class="glyphicon glyphicon-list"></span> Home</a></li>
+                <li class="active"><a href="/user/reservationIntro/service/__${service.id}__"><span class="glyphicon glyphicon-plus"></span> Zarezerwuj usługę</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Wyloguj</a></li>
@@ -37,6 +36,26 @@
     </div>
 </nav>
 
-<span th:text="'Hello on User home page, ' + ${user}"></span>
+<table class="table table-hover" style="width:80%; margin:auto;">
+    <thead>
+    <tr>
+        <th>Usługa</th>
+        <th>Czas trwania(w minutach)</th>
+        <th>Cena</th>
+    </tr>
+    </thead>
+        <th:block th:each="service : ${serviceList}">
+            <tr style="text-align: left;">
+                <td th:text="${service.name}">...</td>
+                <td th:text="${service.duration}">...</td>
+                <td th:text="${service.price}">...</td>
+                <td>
+                    <form action="#" th:action="@{/user/reservationIntro/service/__${service.id}__}" th:method="get" >
+                        <button type="submit" class="btn btn-link">Wybierz</button>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+</table>
 </body>
 </html>
