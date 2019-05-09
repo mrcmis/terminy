@@ -13,12 +13,15 @@ import java.security.Principal;
 @Controller
 public class HomeUserController {
     @GetMapping("user")
-    public String home(Principal principal, Model model){
+    public String home(Principal principal, @SessionAttribute("company") Company company, Model model){
         model.addAttribute("user", principal.getName());
 
         BaseEntity a = (BaseEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println(" INJECTED CLASS ->>>>>>>>>>>> :"+ a.getClass().getName());
-        return "home";
+
+        System.out.println("COMPANY IN SESSION ->>>>>>>>>>>> :" + company.getName());
+
+        return "homeUser";
     }
 
 }
