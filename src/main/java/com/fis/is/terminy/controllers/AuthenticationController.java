@@ -79,7 +79,7 @@ public class AuthenticationController {
         if(!(auth instanceof AnonymousAuthenticationToken)) {
             Collection<String> privileges = convertAuthoritiesToPrivilegesList(auth.getAuthorities());
             if(privileges.contains("USER")){
-                return "redirect:user";
+                return "redirect:hashUser";
             } else if(privileges.contains("COMPANY")){
                 return "redirect:company";
             }
