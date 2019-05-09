@@ -1,5 +1,7 @@
 package com.fis.is.terminy.models;
 
+import com.fis.is.terminy.validation.annotations.UniqueEmailCheck;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
@@ -15,6 +17,7 @@ public class Client extends BaseEntity {
     @Column(unique = true)
     @NotBlank(message = "NB", groups = {editEntity.class, Default.class})
     @Email(groups = editEntity.class)
+    @UniqueEmailCheck(message = "login already used")
     private String mail;
 
     @Column

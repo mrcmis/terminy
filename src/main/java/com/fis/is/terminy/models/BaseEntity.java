@@ -1,5 +1,6 @@
 package com.fis.is.terminy.models;
 
+import com.fis.is.terminy.validation.annotations.UniqueLoginCheck;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,6 +18,7 @@ public abstract class BaseEntity implements UserDetails {
 
     @Column(unique = true)
     @NotBlank(message = "NB")
+    @UniqueLoginCheck(message = "login already used")
     private String login;
 
     @Column
