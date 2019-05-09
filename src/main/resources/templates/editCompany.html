@@ -5,10 +5,44 @@
     <title>Title</title>
     <link rel="stylesheet" type="text/css" href="resources/style.css">
     <link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        body{ font: 14px sans-serif; text-align: center; }
+        .wrapper{ width: 350px; padding: 20px; margin:auto; }
+    </style>
 </head>
 <body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Terminy</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="/company"><span class="glyphicon glyphicon-list"></span> Twoje usługi</a></li>
+                <li><a href="/company/companySchedule"><span class="glyphicon glyphicon-calendar"></span> Kalendarz</a></li>
+                <li><a href="/company/companyServices"><span class="glyphicon glyphicon-plus"></span> Usługi</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="/company/editCompany"><span class="glyphicon glyphicon-user"></span> Twoje konto</a></li>
+                <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Wyloguj</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <div id = "main">
-    <form class="w3-container" action="#" th:action="@{/editCompany}" th:object="${company}" method="post">
+    <form class="w3-container" action="#" th:action="@{/company/editCompany}" th:object="${company}" method="post">
 
         <label class="w3-text-red"><b>Email</b></label>
         <input class="w3-input w3-border" type="text" name="mail" th:field="*{mail}">

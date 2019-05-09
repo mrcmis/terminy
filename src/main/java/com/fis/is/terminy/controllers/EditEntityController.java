@@ -34,7 +34,7 @@ public class EditEntityController {
         return "editClient";
     }
 
-    @GetMapping("/editCompany")
+    @GetMapping("/company/editCompany")
     public String editCompany(Model model){
         Company company = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("company", company);
@@ -42,7 +42,7 @@ public class EditEntityController {
         return "editCompany";
     }
 
-    @PostMapping("/editCompany")
+    @PostMapping("/company/editCompany")
     public String editedCompany(@Validated(BaseEntity.editEntity.class) Company company, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             return "editCompany";
