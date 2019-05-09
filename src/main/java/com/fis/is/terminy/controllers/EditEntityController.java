@@ -26,7 +26,7 @@ public class EditEntityController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @GetMapping("/editClient")
+    @GetMapping("/user/editClient")
     public String editUser(Model model){
         Client client = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("client", client);
@@ -57,7 +57,7 @@ public class EditEntityController {
         }
     }
 
-    @PostMapping("/editClient")
+    @PostMapping("/user/editClient")
     public String editedUser(@Validated(BaseEntity.editEntity.class) Client client, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             return "editClient";
