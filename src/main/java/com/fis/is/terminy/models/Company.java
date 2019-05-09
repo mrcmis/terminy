@@ -1,13 +1,15 @@
 package com.fis.is.terminy.models;
 
+import com.fis.is.terminy.validation.annotations.UniqueEmailCheck;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
+import java.util.*;
 
 @Entity
 public class Company extends BaseEntity {
@@ -17,6 +19,7 @@ public class Company extends BaseEntity {
 
     @NotBlank(message = "NB", groups = {editEntity.class, Default.class})
     @Email(groups = editEntity.class)
+    @UniqueEmailCheck(message = "login already used")
     private String mail;
 
     @Column
