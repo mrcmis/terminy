@@ -30,6 +30,11 @@ public class Company extends BaseEntity {
     @NotBlank(message = "NB")
     private String codedName;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = BaseEntity.class)
+    @JoinTable(name = "blockedUsers", joinColumns = @JoinColumn(name = "company_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<? extends BaseEntity> blockedUsers = new HashSet<BaseEntity>();
+
     @Column
     @NotNull
     private boolean mailNotification;
@@ -96,5 +101,13 @@ public class Company extends BaseEntity {
 
     public void setReportsGeneration(boolean reportsGeneration) {
         this.reportsGeneration = reportsGeneration;
+    }
+
+    public Set<? extends BaseEntity> getBlockedUsers() {
+        return blockedUsers;
+    }
+
+    public void setBlockedUsers(Set<? extends BaseEntity> blockedUsers) {
+        this.blockedUsers = blockedUsers;
     }
 }
