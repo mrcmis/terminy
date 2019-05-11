@@ -1,0 +1,15 @@
+{
+  "background_color": "#0f0f0a",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "../resources/icon/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "name": "Terminy",
+  "short_name": "Terminy",
+  "scope": "/login/",
+  "start_url": "/login/"
+}
