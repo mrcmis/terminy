@@ -93,6 +93,21 @@ public abstract class BaseEntity implements UserDetails {
         return grantedPrivileges;
     }
 
+    @Override
+    public int hashCode(){
+        return Long.hashCode(id);
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(o == null) return false;
+        if(o.getClass() != getClass()) return false;
+        BaseEntity other = (BaseEntity)o;
+
+        return other.getId() == id;
+    }
+
     /**
      * marker interface used to limit validation while editing user
      */

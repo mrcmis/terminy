@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../resources/style.css">
+    <link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+
+<form th:action="@{/company/blockingUsers}" method="POST" th:object="${company}">
+    <ul>
+        <li th:each="client : ${allClients}">
+            <div>
+                <input type="checkbox" th:field="*{blockedUsers}" th:value="${client.id}" th:checked="${blockedUsers.contains(client)}">
+                <label th:text="${client.username}"></label>
+            </div>
+        </li>
+    </ul>
+
+    <div class="field">
+        <button class="ui button" type="submit">Submit</button>
+    </div>
+</form>
+
+</body>
+</html>
+
+
+

@@ -61,6 +61,9 @@
         <div class="alert alert-danger" th:if="${param.notsaved}">
             Nie udało się zarezerwowac terminu. Spróbuj ponownie później!
         </div>
+        <div class="alert alert-danger" th:if="${param.notallowed}">
+            Firma zablokowała Ci możliwość rezerwacji terminu!
+        </div>
         <div class="alert alert-success" th:if="${param.saved}">
            Pomyślnie zarezerwowano termin!
         </div>

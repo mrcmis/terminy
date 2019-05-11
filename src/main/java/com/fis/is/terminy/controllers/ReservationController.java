@@ -76,6 +76,9 @@ public class ReservationController {
 
         try
         {
+            if(company.getBlockedUsers().contains(currentClient)){
+                return "redirect:/user/reservation?notallowed=true";
+            }
             reservationsRepository.save(reservationsToSave);
         }
         catch (DataIntegrityViolationException e)
