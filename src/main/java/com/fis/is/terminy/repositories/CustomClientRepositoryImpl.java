@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,12 +23,22 @@ public class CustomClientRepositoryImpl implements CustomClientRepository {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
+    @Autowired
+    private PrivilegeRepository privilegeRepository;
+
     @Override
     public void saveModifiedClient(Client client) {
-        Privilege userPrivilege = new Privilege();
-        userPrivilege.setPrivilege("USER");
+        Optional<Privilege> privilegeInDB = privilegeRepository.findByPrivilege("USER");
+        Privilege userPrivilege = privilegeInDB.orElseGet(this::createFirstUserPrivilege);
+
         client.setGrantedPrivileges(Stream.of(userPrivilege).collect(Collectors.toList()));
         client.setPassword(encoder.encode(client.getPassword()));
         entityManager.persist(client);
+    }
+
+    private Privilege createFirstUserPrivilege() {
+        Privilege firstUserPrivilege = new Privilege();
+        firstUserPrivilege.setPrivilege("USER");
+        return firstUserPrivilege;
     }
 }

@@ -35,29 +35,24 @@ function generateCodedName($link, $db_name) {
 }
 
 function set_privileges($link, $db_name, $company_id, $privilege_name) {
-    $sql = "INSERT INTO $db_name.privilege(privilege) VALUES ('" . $privilege_name . "')";
+    $sql = "SELECT id FROM $db_name.privilege WHERE privilege='" . $privilege_name . "'";
     if($stmt = mysqli_prepare($link, $sql)){
         if(mysqli_stmt_execute($stmt)) {
-            $sql = "SELECT LAST_INSERT_ID()";
-            if($stmt = mysqli_prepare($link, $sql)){
-                if(mysqli_stmt_execute($stmt)) {
-                    mysqli_stmt_store_result($stmt);       
-                    mysqli_stmt_bind_result($stmt, $privilege_id);
-                    mysqli_stmt_fetch($stmt);
+            mysqli_stmt_store_result($stmt);       
+            mysqli_stmt_bind_result($stmt, $privilege_id);
+            mysqli_stmt_fetch($stmt);
 
-                    $sql = "INSERT into $db_name.user_privilege(user_id, privilege_id) values(?,?)";
-                    if($stmt = mysqli_prepare($link, $sql)){
-                        mysqli_stmt_bind_param($stmt, "dd", $company_id, $privilege_id);
-                        if(!mysqli_stmt_execute($stmt)) {
-                            echo "Błąd! Spróbuj później.";
-                        }
-                    } else {
-                        echo "Błąd! Spróbuj później.";
-                    }
-                } else {
+            $sql = "INSERT into $db_name.user_privilege(user_id, privilege_id) values(?,?)";
+            if($stmt = mysqli_prepare($link, $sql)){
+                mysqli_stmt_bind_param($stmt, "dd", $company_id, $privilege_id);
+                if(!mysqli_stmt_execute($stmt)) {
                     echo "Błąd! Spróbuj później.";
                 }
+            } else {
+                echo "Błąd! Spróbuj później.";
             }
+        } else {
+            echo "Błąd! Spróbuj później.";
         }
     }
 }
@@ -175,8 +170,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                         $mail_notification = isset($_POST['feature-mail-notification']) ? 1 : 0;
                         $reports_generation = isset($_POST['feature-reports-generation']) ? 1 : 0;
 
-                        $sql = "INSERT INTO $db_name.company(id, name, coded_name, mail, phone, blocking_users, mail_notification, reports_generation) 
-                        VALUES(?, ?, ?, ?, ?, $blocking_users, $mail_notification, $reports_generation)";
+                        $sql = "INSERT INTO $db_name.company(id, name, coded_name, mail, phone) 
+                        VALUES(?, ?, ?, ?, ?)";
 
                         if($stmt = mysqli_prepare($link, $sql)){
                             mysqli_stmt_bind_param($stmt, "issss", $id, $name, $coded_name, $email, $phone);

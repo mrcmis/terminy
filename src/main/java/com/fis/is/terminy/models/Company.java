@@ -35,17 +35,6 @@ public class Company extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<? extends BaseEntity> blockedUsers = new HashSet<BaseEntity>();
 
-    @Column
-    @NotNull
-    private boolean mailNotification;
-
-    @Column
-    @NotNull
-    private boolean reportsGeneration;
-
-    @Column
-    @NotNull
-    private boolean blockingUsers;
 
     public String getPhone() {
         return phone;
@@ -77,30 +66,6 @@ public class Company extends BaseEntity {
 
     public void setCodedName(String codedName) {
         this.codedName = codedName;
-    }
-
-    public boolean isMailNotification() {
-        return mailNotification;
-    }
-
-    public void setMailNotification(boolean mailNotification) {
-        this.mailNotification = mailNotification;
-    }
-
-    public boolean isBlockingUsers() {
-        return blockingUsers;
-    }
-
-    public void setBlockingUsers(boolean blockingUsers) {
-        this.blockingUsers = blockingUsers;
-    }
-
-    public boolean isReportsGeneration() {
-        return reportsGeneration;
-    }
-
-    public void setReportsGeneration(boolean reportsGeneration) {
-        this.reportsGeneration = reportsGeneration;
     }
 
     public Set<? extends BaseEntity> getBlockedUsers() {

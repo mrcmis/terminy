@@ -1,13 +1,42 @@
 <?php
 
+function db_init($link, $db_name) {
+    $sql = "SELECT 1 FROM $db_name.base_entity WHERE login = 'admin'";
+    if($stmt = mysqli_prepare($link, $sql)) {
+        if(mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_store_result($stmt);
+            if(mysqli_stmt_num_rows($stmt) == 0) {
+                $sql = "INSERT INTO $db_name.base_entity(login, password) values('admin', 'admin')";
+                if($stmt = mysqli_prepare($link, $sql)) {
+                    if(!mysqli_stmt_execute($stmt)) {
+                        echo "Błąd! Spróbuj później.";
+                    }
+                }
+
+                $sql = "INSERT INTO $db_name.privilege(privilege) VALUES ('COMPANY'), ('BLOCKING_USERS'), ('MAIL_NOTIFICATION'), ('REPORTS_GENERATION')";
+                if($stmt = mysqli_prepare($link, $sql)) {
+                    if(!mysqli_stmt_execute($stmt)) {
+                        echo "Błąd! Spróbuj później.";
+                    }
+                }
+            }
+        } else {
+            echo "Błąd! Spróbuj później.";
+        }
+    }   
+}
+
 session_start();
  
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     header("location: home.php");
     exit;
 }
- 
+
 require_once "config.php";
+
+db_init($link, $db_name);
+
  
 $login = $password = "";
 $login_err = $password_err = "";
