@@ -60,7 +60,7 @@ function set_privileges($link, $db_name, $company_id, $privilege_name) {
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-function send_login_data($login, $password, $email, $name) {
+function send_login_data($login, $password, $email, $name, $coded_name, $blocking_users, $mail_notification, $reports_generation) {
     header('Content-type: text/html; charset=utf-8');
 
     require 'phpmailer/src/Exception.php';
@@ -85,8 +85,20 @@ function send_login_data($login, $password, $email, $name) {
         $mail->setFrom('terminy.io@gmail.com', 'Terminy - administrator');
         $mail->addAddress($email, $name);
 
-        $mail->Subject = "[TERMINY] Dane do logowania";
-        $mail->Body = "login: " . $login . " hasło: " . $password;
+        $mail->Subject = "[TERMINY] Stworzono twoją firmę";
+
+        $page_address = "Twoja firma jest dostępna pod adresem: http://io-terminy.herokuapp.com/login/" . $coded_name . "\n";
+        $login_data = "Dane umożliwiające zalogowanie jako administrator - login:" . $login . " hasło:" . $password . "\n";
+        $addition = "Twoje dodatkowe możliwości:\n";
+        if($blocking_users == 1)
+            $addition .= " - blokowanie niechcianych użytkowników\n";
+        if($mail_notification == 1)
+            $addition .= " - powiadomienia mailowe\n";
+        if($reports_generation == 1)
+            $addition .= " - możliowść generowania raportów\n";
+        $html_button = "\nKod umożliwiający przekierowanie klientów bezpośrednio na stronę z rezerwacjami:\n" . 
+        "<a href='http://io-terminy.herokuapp.com/login/" . $coded_name . "' style='background:linear-gradient(#3d85c6, #073763); border-radius: 5px; padding: 8px 20px; color: #ffffff;display: inline-block; font-size: 16px; text-align: center;'>Zarezerwuj termin</a>";
+        $mail->Body = $page_address . $login_data . $addition . $html_button;
 
         $mail->send();
 
@@ -176,7 +188,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                         if($stmt = mysqli_prepare($link, $sql)){
                             mysqli_stmt_bind_param($stmt, "issss", $id, $name, $coded_name, $email, $phone);
                             if(mysqli_stmt_execute($stmt)) {
-                                send_login_data($login, $random_password, $email, $name);
+                                send_login_data($login, $random_password, $email, $name, $coded_name, $blocking_users, $mail_notification, $reports_generation);
                                 header("location: home.php?status=added");
                                 echo "Poprawnie dodano firmę.";
                             }
