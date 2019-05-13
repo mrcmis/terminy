@@ -11,21 +11,21 @@ import javax.validation.groups.Default;
 @Entity
 public class Client extends BaseEntity {
     @Column
-    @NotBlank(message = "NB", groups = {editEntity.class, Default.class})
+    @NotBlank(message = "Uzupełnij pole", groups = {editEntity.class, Default.class})
     private String phone;
 
     @Column(unique = true)
-    @NotBlank(message = "NB", groups = {editEntity.class, Default.class})
+    @NotBlank(message = "Uzupełnij pole", groups = {editEntity.class, Default.class})
     @Email(groups = editEntity.class)
-    @UniqueEmailCheck(message = "login already used")
+    @UniqueEmailCheck(message = "użytkownik o takim mailu istnieje")
     private String mail;
 
     @Column
-    @NotBlank(message = "NB")
+    @NotBlank(message = "Uzupełnij pole")
     private String name;
 
     @Column
-    @NotBlank(message = "NB")
+    @NotBlank(message = "Uzupełnij pole")
     private String surname;
 
 

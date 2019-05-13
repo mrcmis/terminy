@@ -3,29 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="../resources/style.css">
-    <link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" type="text/css" href="../resources/userDataForms.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="../resources/manifest.json">
 </head>
 <body>
 <div id = "main">
-    <form class="w3-container w3-DimGrey" action="#" th:action="@{/login}" method="post">
-
-        <label class="w3-text-white"><br><b>Logowanie</b><br></label>
-        <label class="w3-text-white"><br><br><b>Login</b><br></label>
-        <input class="w3-input w3-border" type="text" name="login" th:placeholder="login" id="login">
-
-        <label class="w3-text-white"><b>Password</b><br><br></label>
-        <input class="w3-input w3-border" type="password" name="password" th:placeholder="password" id="password"><br>
-
-        <div align="center" th:if="${param.error}">
-            <p style="font-size: 20; color: #FF1C19;">Email or Password is invalid.</p>
+    <div class="login-page">
+        <p style="font-size: 24px; font-weight:bold;">TERMINY</p>
+        <p style="font-size: 18px; margin-top:-15px;">Nazwa firmy</p>
+        <div class="form">
+            <form class="login-form" action="#" th:action="@{/login}" method="post">
+                <input type="text" name="login" th:placeholder="login" id="login"/>
+                <input type="password" name="password" th:placeholder="hasło" id="password"/>
+                <div align="center" th:if="${param.error}">
+                    <p style="font-size: 12px; color: #FF1C19; margin-top:-10px;">Niepoprawny login lub hasło</p>
+                </div>
+                <button type="submit" id="button_submit">Zaloguj się</button>
+                <p class="message">Nie masz konta? <a href="/register">Zarejestruj się</a></p>
+            </form>
         </div>
-
-        <button class="w3-button w3-round-xxlarge w3-teal" type="submit" id="button_submit">Login</button>
-
-    </form>
-
+    </div>
 </div>
 </body>
 </html>

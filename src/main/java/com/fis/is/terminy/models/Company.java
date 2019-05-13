@@ -14,20 +14,20 @@ import java.util.*;
 @Entity
 public class Company extends BaseEntity {
     @Column
-    @NotBlank(message = "NB", groups = {editEntity.class, Default.class})
+    @NotBlank(message = "Uzupełnij pole", groups = {editEntity.class, Default.class})
     private String phone;
 
-    @NotBlank(message = "NB", groups = {editEntity.class, Default.class})
+    @NotBlank(message = "Uzupełnij pole", groups = {editEntity.class, Default.class})
     @Email(groups = editEntity.class)
     @UniqueEmailCheck(message = "login already used")
     private String mail;
 
     @Column
-    @NotBlank(message = "NB", groups = {editEntity.class, Default.class})
+    @NotBlank(message = "Uzupełnij pole", groups = {editEntity.class, Default.class})
     private String name;
 
     @Column
-    @NotBlank(message = "NB")
+    @NotBlank(message = "Uzupełnij pole")
     private String codedName;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = BaseEntity.class)

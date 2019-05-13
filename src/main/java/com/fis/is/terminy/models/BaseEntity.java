@@ -17,12 +17,12 @@ public abstract class BaseEntity implements UserDetails {
     private long id;
 
     @Column(unique = true)
-    @NotBlank(message = "NB")
-    @UniqueLoginCheck(message = "login already used")
+    @NotBlank(message = "Uzupełnij pole")
+    @UniqueLoginCheck(message = "użytkownik o takim loginie istnieje")
     private String login;
 
     @Column
-    @NotBlank(message = "NB")
+    @NotBlank(message = "Uzupełnij pole")
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = Privilege.class)

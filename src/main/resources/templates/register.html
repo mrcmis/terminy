@@ -3,41 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="resources/style.css">
-    <link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" type="text/css" href="../resources/userDataForms.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <div id = "main">
-    <form class="w3-container" action="#" th:action="@{/register}" th:object="${client}" method="post">
-
-        <label class="w3-text-red"><b>Login</b></label>
-        <input class="w3-input w3-border" type="text" name="user" th:field="*{login}">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></p>
-
-        <label class="w3-text-red"><b>Email</b></label>
-        <input class="w3-input w3-border" type="text" name="mail" th:field="*{mail}">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p>
-
-        <label class="w3-text-red"><b>Password</b></label>
-        <input class="w3-input w3-border" type="password" name="password" th:field="*{password}">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-
-        <label class="w3-text-red"><b>Name</b></label>
-        <input class="w3-input w3-border" type="text" name="name" th:field="*{name}">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
-
-        <label class="w3-text-red"><b>Surname</b></label>
-        <input class="w3-input w3-border" type="text" name="surname" th:field="*{surname}">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></p>
-
-        <label class="w3-text-red"><b>Phone</b></label>
-        <input class="w3-input w3-border" type="text" name="phone" th:field="*{phone}">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
-
-        <button class="w3-btn w3-red" type="submit" id="button_submit">Register</button>
-
-    </form>
-
+    <div class="login-page">
+        <p style="font-size: 24px; margin-top: 20px; margin-bottom:3px;">TERMINY</p>
+        <div class="form">
+            <form action="#" th:action="@{/register}" th:object="${client}" method="post">
+                <input type="text" name="user" th:field="*{login}" th:placeholder="login"/>
+                <p class="register-warning" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></p>
+                <input  type="text" name="mail" th:field="*{mail}" th:placeholder="mail"/>
+                <p class="register-warning" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p>
+                <input type="password" name="password" th:field="*{password}" th:placeholder="hasło"/>
+                <p class="register-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+                <input type="text" name="name" th:field="*{name}" th:placeholder="imię"/>
+                <p class="register-warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                <input type="text" name="surname" th:field="*{surname}" th:placeholder="nazwisko"/>
+                <p class="register-warning" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></p>
+                <input type="text" name="phone" th:field="*{phone}" th:placeholder="telefon"/>
+                <p class="register-warning" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
+                <button type="submit" id="button_submit">Utwórz konto</button>
+                <p class="message">Masz konto? <a href="/login">Zaloguj się</a></p>
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>
