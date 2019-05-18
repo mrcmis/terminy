@@ -1,4 +1,4 @@
-package com.fis.is.terminy.conventers;
+package com.fis.is.terminy.converters;
 
 import com.fis.is.terminy.models.BaseEntity;
 import com.fis.is.terminy.models.Client;
@@ -7,11 +7,9 @@ import com.fis.is.terminy.repositories.ClientRepository;
 import com.fis.is.terminy.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.Optional;
 
 @Component

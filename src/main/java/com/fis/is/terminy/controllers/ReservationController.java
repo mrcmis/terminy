@@ -1,5 +1,6 @@
 package com.fis.is.terminy.controllers;
 
+import com.fis.is.terminy.google.CalendarEventCreator;
 import com.fis.is.terminy.models.*;
 import com.fis.is.terminy.repositories.CompanyScheduleRepository;
 import com.fis.is.terminy.repositories.CompanyServiceRepository;
@@ -11,8 +12,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -62,31 +66,39 @@ public class ReservationController {
     }
 
     @GetMapping("user/reservation/add/{id}")
-    public String saveReservation(@PathVariable(value = "id") int id)
+    public String saveReservation(@PathVariable(value = "id") int id, RedirectAttributes redirectAttributes)
     {
         Client currentClient = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        Reservations reservationsToSave = new Reservations();
-        reservationsToSave.setClient(currentClient);
-        reservationsToSave.setCompany(company);
-        reservationsToSave.setService(companyServiceRepository.findByIdAndCompanyId(serviceId,company.getId()).get());
-        reservationsToSave.setDate(date);
-        reservationsToSave.setStart_hour(reservationUnits.get(id).getStart_hour());
-        reservationsToSave.setEnd_hour(reservationUnits.get(id).getEnd_hour());
+        Reservations reservationToSave = prepareReservation(id, currentClient);
 
         try
         {
             if(company.getBlockedUsers().contains(currentClient)){
                 return "redirect:/user/reservation?notallowed=true";
             }
-            reservationsRepository.save(reservationsToSave);
+            reservationsRepository.save(reservationToSave);
         }
         catch (DataIntegrityViolationException e)
         {
             return "redirect:/user/reservation?notsaved=true";
         }
 
+        String eventHtmlLink = CalendarEventCreator.createEventHtmlLink(reservationToSave);
+        if(!eventHtmlLink.isEmpty())
+            redirectAttributes.addFlashAttribute("googleEventLink", eventHtmlLink);
+
         return "redirect:/user";
+    }
+
+    private Reservations prepareReservation(@PathVariable("id") int id, Client currentClient) {
+        Reservations reservationToSave = new Reservations();
+        reservationToSave.setClient(currentClient);
+        reservationToSave.setCompany(company);
+        reservationToSave.setService(companyServiceRepository.findByIdAndCompanyId(serviceId,company.getId()).get());
+        reservationToSave.setDate(date);
+        reservationToSave.setStart_hour(reservationUnits.get(id).getStart_hour());
+        reservationToSave.setEnd_hour(reservationUnits.get(id).getEnd_hour());
+        return reservationToSave;
     }
 
     @PostMapping("user/reservation")

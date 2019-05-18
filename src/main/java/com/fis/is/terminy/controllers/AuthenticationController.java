@@ -1,6 +1,5 @@
 package com.fis.is.terminy.controllers;
 
-import com.fis.is.terminy.models.BaseEntity;
 import com.fis.is.terminy.models.Client;
 import com.fis.is.terminy.models.Company;
 import com.fis.is.terminy.repositories.ClientRepository;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
-
 
 import javax.validation.Valid;
 import java.util.ArrayList;
