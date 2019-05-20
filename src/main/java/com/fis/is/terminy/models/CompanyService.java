@@ -12,7 +12,7 @@ public class CompanyService {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-    @Column(unique = true)
+    @Column
     private String name;
 
     @Column

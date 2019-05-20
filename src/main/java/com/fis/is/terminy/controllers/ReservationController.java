@@ -1,5 +1,6 @@
 package com.fis.is.terminy.controllers;
 
+import com.fis.is.terminy.converters.PrivilegesConverter;
 import com.fis.is.terminy.google.CalendarEventCreator;
 import com.fis.is.terminy.models.*;
 import com.fis.is.terminy.repositories.CompanyScheduleRepository;
@@ -22,6 +23,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,9 +85,12 @@ public class ReservationController {
             return "redirect:/user/reservation?notsaved=true";
         }
 
-        String eventHtmlLink = CalendarEventCreator.createEventHtmlLink(reservationToSave);
-        if(!eventHtmlLink.isEmpty())
-            redirectAttributes.addFlashAttribute("googleEventLink", eventHtmlLink);
+        Collection<String> privileges = PrivilegesConverter.convertAuthoritiesToPrivilegesList(company.getAuthorities());
+        if(privileges.contains("MAIL_NOTIFICATION")) {
+            String eventHtmlLink = CalendarEventCreator.createEventHtmlLink(reservationToSave);
+            if (!eventHtmlLink.isEmpty())
+                redirectAttributes.addFlashAttribute("googleEventLink", eventHtmlLink);
+        }
 
         return "redirect:/user";
     }
@@ -119,11 +124,7 @@ public class ReservationController {
 
         reservationUnits = allAvailableReservationUnitList(calendar,reservations, companyService.getDuration());
 
-
-
         model.addAttribute("reservationsList", reservationUnits);
-
-
         return "reservation";
     }
 

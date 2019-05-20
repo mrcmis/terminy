@@ -1,5 +1,6 @@
 package com.fis.is.terminy.controllers;
 
+import com.fis.is.terminy.converters.PrivilegesConverter;
 import com.fis.is.terminy.models.Client;
 import com.fis.is.terminy.models.Company;
 import com.fis.is.terminy.repositories.ClientRepository;
@@ -55,7 +56,7 @@ public class AuthenticationController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if(!(auth instanceof AnonymousAuthenticationToken)) {
-            Collection<String> privileges = convertAuthoritiesToPrivilegesList(auth.getAuthorities());
+            Collection<String> privileges = PrivilegesConverter.convertAuthoritiesToPrivilegesList(auth.getAuthorities());
             if(privileges.contains("USER")){
                 return "redirect:/user";
             } else if(privileges.contains("COMPANY")){
@@ -75,7 +76,7 @@ public class AuthenticationController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if(!(auth instanceof AnonymousAuthenticationToken)) {
-            Collection<String> privileges = convertAuthoritiesToPrivilegesList(auth.getAuthorities());
+            Collection<String> privileges = PrivilegesConverter.convertAuthoritiesToPrivilegesList(auth.getAuthorities());
             if(privileges.contains("USER")){
                 return "redirect:/user";
             } else if(privileges.contains("COMPANY")){
@@ -95,15 +96,5 @@ public class AuthenticationController {
         }
 
         return "login";
-    }
-
-    private Collection<String> convertAuthoritiesToPrivilegesList(Collection<? extends GrantedAuthority> authorities){
-        List<String> privileges = new ArrayList<>();
-        if(authorities != null){
-            for(GrantedAuthority authority : authorities){
-                privileges.add(authority.toString());
-            }
-        }
-        return privileges;
     }
 }
