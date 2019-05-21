@@ -77,6 +77,15 @@ public class ReservationController {
         Client currentClient = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Reservations reservationToSave = prepareReservation(id, currentClient);
 
+        if(date.isBefore(LocalDate.now()))
+        {
+            return "redirect:/user/reservation?badTerm=true";
+        }
+        else if(date.equals(LocalDate.now()) && LocalTime.now().isAfter(reservationUnits.get(id).getStart_hour()))
+        {
+            return "redirect:/user/reservation?badterm=true";
+        }
+
         try
         {
             if(company.getBlockedUsers().contains(currentClient)){
@@ -118,7 +127,7 @@ public class ReservationController {
         }
     }
 
-    private Reservations prepareReservation(@PathVariable("id") int id, Client currentClient) {
+    private Reservations prepareReservation(int id, Client currentClient) {
         Reservations reservationToSave = new Reservations();
         reservationToSave.setClient(currentClient);
         reservationToSave.setCompany(company);
@@ -160,7 +169,7 @@ public class ReservationController {
         LocalTime end = start.plusMinutes(duration);
         int id = 0;
 
-        while(start.isBefore(calendar.getEnd_hour()) || start.equals(calendar.getEnd_hour()))
+        while((start.isBefore(calendar.getEnd_hour()) || start.equals(calendar.getEnd_hour()))  && (end.isBefore(calendar.getEnd_hour()) || end.equals(calendar.getEnd_hour())))
         {
             boolean canBeAdded = true;
             System.out.println("/t" + id + "/t");
