@@ -1,10 +1,8 @@
 package com.fis.is.terminy.validation.validators;
 
-
 import com.fis.is.terminy.repositories.ClientRepository;
 import com.fis.is.terminy.repositories.CompanyRepository;
 import com.fis.is.terminy.validation.annotations.UniqueEmailCheck;
-import com.fis.is.terminy.validation.annotations.UniqueLoginCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

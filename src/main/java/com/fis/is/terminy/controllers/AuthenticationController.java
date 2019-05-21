@@ -1,9 +1,12 @@
 package com.fis.is.terminy.controllers;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
+import com.fis.is.terminy.models.BaseEntity;
 import com.fis.is.terminy.models.Client;
 import com.fis.is.terminy.models.Company;
 import com.fis.is.terminy.repositories.ClientRepository;
 import com.fis.is.terminy.repositories.CompanyRepository;
+import com.fis.is.terminy.validation.annotations.BlankLoginUserCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -51,8 +54,12 @@ public class AuthenticationController {
     }
 
     @GetMapping("/login")
-    public String login(Model model){
+    public String login(@Valid BaseEntity baseEntity, BindingResult bindingResult, Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if(bindingResult.hasErrors()){
+            return "login";
+        }
 
         if(!(auth instanceof AnonymousAuthenticationToken)) {
             Collection<String> privileges = convertAuthoritiesToPrivilegesList(auth.getAuthorities());
