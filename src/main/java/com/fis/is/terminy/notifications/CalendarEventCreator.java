@@ -1,4 +1,4 @@
-package com.fis.is.terminy.google;
+package com.fis.is.terminy.notifications;
 
 import com.fis.is.terminy.models.Reservations;
 import com.google.api.client.auth.oauth2.Credential;

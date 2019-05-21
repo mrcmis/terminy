@@ -1,8 +1,10 @@
 package com.fis.is.terminy.controllers;
 
 import com.fis.is.terminy.converters.PrivilegesConverter;
-import com.fis.is.terminy.google.CalendarEventCreator;
+import com.fis.is.terminy.notifications.CalendarEventCreator;
 import com.fis.is.terminy.models.*;
+import com.fis.is.terminy.notifications.EmailContent;
+import com.fis.is.terminy.notifications.EmailService;
 import com.fis.is.terminy.repositories.CompanyScheduleRepository;
 import com.fis.is.terminy.repositories.CompanyServiceRepository;
 import com.fis.is.terminy.repositories.ReservationsRepository;
@@ -36,6 +38,8 @@ public class ReservationController {
     private CompanyServiceRepository companyServiceRepository;
     @Autowired
     private CompanyScheduleRepository companyScheduleRepository;
+    @Autowired
+    private EmailService emailService;
 
 
     private Long serviceId;
@@ -85,14 +89,33 @@ public class ReservationController {
             return "redirect:/user/reservation?notsaved=true";
         }
 
+        notifyUsers(redirectAttributes, currentClient, reservationToSave);
+
+        return "redirect:/user";
+    }
+
+    private void notifyUsers(RedirectAttributes redirectAttributes, Client currentClient, Reservations reservationToSave) {
+        EmailContent companyMailContent = new EmailContent().setSubject("Nowa rezerwacja")
+                .addCompanyReservationBasicContent(reservationToSave, currentClient);
+        EmailContent clientMailContent = new EmailContent().setSubject("Poprawnie zarezerwowano termin")
+                .addClientReservationBasicContent(reservationToSave, company.getName());
+
         Collection<String> privileges = PrivilegesConverter.convertAuthoritiesToPrivilegesList(company.getAuthorities());
         if(privileges.contains("MAIL_NOTIFICATION")) {
             String eventHtmlLink = CalendarEventCreator.createEventHtmlLink(reservationToSave);
-            if (!eventHtmlLink.isEmpty())
+            if (!eventHtmlLink.isEmpty()) {
                 redirectAttributes.addFlashAttribute("googleEventLink", eventHtmlLink);
+                companyMailContent.addGCalendar(eventHtmlLink);
+                clientMailContent.addGCalendar(eventHtmlLink);
+            }
         }
 
-        return "redirect:/user";
+        try {
+            emailService.send(company.getMail(), companyMailContent);
+            emailService.send(currentClient.getMail(), clientMailContent);
+        } catch(Exception exception) {
+                System.out.println(exception.getMessage());
+        }
     }
 
     private Reservations prepareReservation(@PathVariable("id") int id, Client currentClient) {

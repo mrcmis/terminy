@@ -257,7 +257,7 @@ mysqli_close($link);
                     <label for="feature-mail-notification">
                         <input type="checkbox" name="feature-mail-notification" id="feature-mail-notification" value="2"
                         <?php echo ($mail_notification) ? 'checked=""' : ''; ?>>
-                        Powiadomienia mailowe
+                        Dodatkowe powiadomienia
                     </label>
                 </div>
                 <div class="checkbox">
