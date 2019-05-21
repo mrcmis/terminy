@@ -43,6 +43,9 @@
             <div class="alert alert-danger" th:if="${param.error}">
                 Dany termin jest już zapisany!
             </div>
+            <div class="alert alert-danger" th:if="${param.wrongHour}">
+                Proszę podać poprawny czas pracy!
+            </div>
             <div class="alert alert-danger" th:if="${param.wrongDay}">
                 Proszę podać poprawny dzień!
             </div>
