@@ -28,7 +28,7 @@ public class ClientReservationController {
     {
         Client currentClient = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<Reservations> reservationsUnits = reservationsRepository.findByCompanyIdAndClientId(companyInSession.getId(), currentClient.getId());
-        reservationsUnits.sort((Reservations resrvation1, Reservations resrvation2)->{return -resrvation1.getDate().compareTo(resrvation2.getDate());});
+        reservationsUnits.sort((Reservations reservation1, Reservations reservation2)-> reservation2.getDate().compareTo(reservation1.getDate()));
         model.addAttribute("reservationsList", reservationsUnits);
         return "clientReservations";
     }

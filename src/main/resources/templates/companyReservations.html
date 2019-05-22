@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Terminy</title>
+    <title>Terminy - firma</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css"> 
     <style type="text/css">
         body{ font: 14px sans-serif; text-align: center; }
         .wrapper{ width: 350px; padding: 20px; margin:auto; }
@@ -38,14 +39,45 @@
     </div>
 </nav>
 
-<div class="wrapper">
-    <div class="page-header">
-        <h1>Twoje usługi</h1>
+<fieldset style="text-align: center;">
+    <div class="alert alert-success" th:if="${param.deleted}">
+        Pomyślnie odwołano termin!
     </div>
+    <div class="alert alert-danger" th:if="${param.error}">
+        Nie można anulować wybranego terminu!
+    </div>
+</fieldset>
 
-    <div>
-        <h3>tu pojawią się zarezerwowane usługi.</h3>
-    </div>
+<div style=" width:60%; margin:auto; margin-bottom:15px; border-bottom: 1px solid #e5e5e5;"><h1>Twoje rezerwacje</h1></div>
+
+<div th:if="${reservationsListSize}==0">
+    <div>Brak zarezerwowanych terminów</div>
+</div>
+<div th:unless="${reservationsListSize}==0">
+    <table class="table table-hover" style="width:80%; margin:auto;">
+        <thead>
+        <tr>
+            <th>Data</th>
+            <th>Usługa</th>
+            <th>Klient</th>
+            <th>Dane kontaktowe</th>
+        </tr>
+        </thead>
+        <th:block th:each="reservation : ${reservationsList}">
+            <tr style="text-align: left;">
+                <td th:text="${reservation.date} + ', ' + ${reservation.start_hour}">...</td>
+                <td th:text="${reservation.service.name}">...</td>
+                <td th:text="${reservation.client.name}+ ' ' + ${reservation.client.surname}">...</td>
+                <td th:text="${reservation.client.mail} + ', ' + ${reservation.client.phone}">...</td>
+                <!--<td>-->
+                    <!--<form  action="#" th:action="@{/user/clientReservations/delete/__${reservation.id}__}" th:method="delete" >-->
+                        <!--<input type="hidden" name="_method" value="delete" />-->
+                        <!--<button type="submit" class="btn btn-link">Odwołaj</button>-->
+                    <!--</form>-->
+                <!--</td>-->
+            </tr>
+        </th:block>
+    </table>
 </div>
 </body>
 </html>
