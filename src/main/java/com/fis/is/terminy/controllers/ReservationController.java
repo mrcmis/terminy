@@ -105,9 +105,9 @@ public class ReservationController {
 
     private void notifyUsers(RedirectAttributes redirectAttributes, Client currentClient, Reservations reservationToSave) {
         EmailContent companyMailContent = new EmailContent().setSubject("Nowa rezerwacja")
-                .addCompanyReservationBasicContent(reservationToSave, currentClient);
+                .addCompanyReservationBasicContent(reservationToSave);
         EmailContent clientMailContent = new EmailContent().setSubject("Poprawnie zarezerwowano termin")
-                .addClientReservationBasicContent(reservationToSave, company.getName());
+                .addClientReservationBasicContent(reservationToSave);
 
         Collection<String> privileges = PrivilegesConverter.convertAuthoritiesToPrivilegesList(company.getAuthorities());
         if(privileges.contains("MAIL_NOTIFICATION")) {
