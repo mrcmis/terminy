@@ -2,6 +2,7 @@ package com.fis.is.terminy.models;
 
 import com.fis.is.terminy.validation.annotations.BlankLoginUserCheck;
 import com.fis.is.terminy.validation.annotations.UniqueLoginCheck;
+import com.fis.is.terminy.validation.BlankLoginValidationGroup;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,7 +21,7 @@ public abstract class BaseEntity implements UserDetails {
     @Column(unique = true)
     @NotBlank(message = "Uzupełnij pole")
     @UniqueLoginCheck(message = "użytkownik o takim loginie istnieje")
-    @BlankLoginUserCheck(message = "Naeleży sie zalogować na stronie kalendarza firmy")
+    @BlankLoginUserCheck(groups = BlankLoginValidationGroup.class)
     private String login;
 
     @Column

@@ -14,7 +14,7 @@ import static java.lang.annotation.ElementType.*;
 @Target({TYPE, FIELD, ANNOTATION_TYPE})
 @Constraint(validatedBy = BlankLoginUserValidator.class)
 public @interface BlankLoginUserCheck {
-    String message() default "Forbidden user login detected";
+    String message() default "Należy zalogować się na stronie firmy";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
