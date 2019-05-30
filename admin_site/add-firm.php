@@ -93,7 +93,7 @@ function send_login_data($login, $password, $email, $name, $coded_name, $blockin
         if($blocking_users == 1)
             $addition .= " - blokowanie niechcianych użytkowników\n";
         if($mail_notification == 1)
-            $addition .= " - powiadomienia mailowe\n";
+            $addition .= " - dodatkowe powiadomienia\n";
         if($reports_generation == 1)
             $addition .= " - możliowść generowania raportów\n";
         $html_button = "\nKod umożliwiający przekierowanie klientów bezpośrednio na stronę z rezerwacjami:\n" . 
@@ -277,7 +277,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="checkbox">
                     <label for="feature-mail-notification">
                         <input type="checkbox" name="feature-mail-notification" id="feature-mail-notification" value="2">
-                        Powiadomienia mailowe
+                        Dodatkowe powiadomienia
                     </label>
                 </div>
                 <div class="checkbox">

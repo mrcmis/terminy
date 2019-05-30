@@ -8,11 +8,14 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReservationsRepository extends JpaRepository<Reservations, Long> {
     Page<Reservations> findByClientId(Long clientId, Pageable pageable);
-    // Optional<Reservations> findByCompanyIdAndClientId(Long companyId, Long clientId);
+    Optional<Reservations> findByIdAndClientId( Long id, Long clientId);
+    Optional<Reservations> findByIdAndCompanyId( Long id, Long companyId);
+    List<Reservations> findByCompanyIdAndClientId(Long companyId, Long clientId);
     List<Reservations> findAllByCompanyIdAndDate(Long companyId, LocalDate date);
     List<Reservations> findAllByCompanyId(Long companyId);
 }

@@ -1,4 +1,4 @@
-package com.fis.is.terminy.google;
+package com.fis.is.terminy.notifications;
 
 import com.fis.is.terminy.models.Reservations;
 import com.google.api.client.auth.oauth2.Credential;
@@ -78,14 +78,15 @@ public class CalendarEventCreator {
     }
 
     private static Event getSuppliedEvent(Reservations newReservation) {
-        String summary = String.format("%s - %s", newReservation.getCompany().getName(), newReservation.getService().getName());
+        String summary = newReservation.getService().getName();
+        String description = String.format("%s - %s", newReservation.getCompany().getName(), summary);
         String startDateTimeStr = String.format("%sT%s:00+02:00", newReservation.getDate(), newReservation.getStart_hour());
         String endDateTimeStr = String.format("%sT%s:00+02:00", newReservation.getDate(), newReservation.getEnd_hour());
 
         EventDateTime start = getEventDateTime(startDateTimeStr);
         EventDateTime end = getEventDateTime(endDateTimeStr);
 
-        return new Event().setSummary(summary).setStart(start).setEnd(end);
+        return new Event().setSummary(summary).setDescription(description).setStart(start).setEnd(end);
     }
 
     private static EventDateTime getEventDateTime(String time) {

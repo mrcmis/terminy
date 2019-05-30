@@ -1,6 +1,5 @@
 package com.fis.is.terminy.controllers;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.fis.is.terminy.models.BaseEntity;
 import com.fis.is.terminy.models.Client;
 import com.fis.is.terminy.models.Company;
@@ -14,8 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import javax.validation.Valid;
 
 @Controller
 public class EditEntityController {

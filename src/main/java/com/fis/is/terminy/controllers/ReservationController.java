@@ -1,7 +1,10 @@
 package com.fis.is.terminy.controllers;
 
-import com.fis.is.terminy.google.CalendarEventCreator;
+import com.fis.is.terminy.converters.PrivilegesConverter;
+import com.fis.is.terminy.notifications.CalendarEventCreator;
 import com.fis.is.terminy.models.*;
+import com.fis.is.terminy.notifications.EmailContent;
+import com.fis.is.terminy.notifications.EmailService;
 import com.fis.is.terminy.repositories.CompanyScheduleRepository;
 import com.fis.is.terminy.repositories.CompanyServiceRepository;
 import com.fis.is.terminy.repositories.ReservationsRepository;
@@ -22,6 +25,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +38,8 @@ public class ReservationController {
     private CompanyServiceRepository companyServiceRepository;
     @Autowired
     private CompanyScheduleRepository companyScheduleRepository;
+    @Autowired
+    private EmailService emailService;
 
 
     private Long serviceId;
@@ -71,6 +77,15 @@ public class ReservationController {
         Client currentClient = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Reservations reservationToSave = prepareReservation(id, currentClient);
 
+        if(date.isBefore(LocalDate.now()))
+        {
+            return "redirect:/user/reservation?badTerm=true";
+        }
+        else if(date.equals(LocalDate.now()) && LocalTime.now().isAfter(reservationUnits.get(id).getStart_hour()))
+        {
+            return "redirect:/user/reservation?badterm=true";
+        }
+
         try
         {
             if(company.getBlockedUsers().contains(currentClient)){
@@ -83,14 +98,36 @@ public class ReservationController {
             return "redirect:/user/reservation?notsaved=true";
         }
 
-        String eventHtmlLink = CalendarEventCreator.createEventHtmlLink(reservationToSave);
-        if(!eventHtmlLink.isEmpty())
-            redirectAttributes.addFlashAttribute("googleEventLink", eventHtmlLink);
+        notifyUsers(redirectAttributes, currentClient, reservationToSave);
 
         return "redirect:/user";
     }
 
-    private Reservations prepareReservation(@PathVariable("id") int id, Client currentClient) {
+    private void notifyUsers(RedirectAttributes redirectAttributes, Client currentClient, Reservations reservationToSave) {
+        EmailContent companyMailContent = new EmailContent().setSubject("Nowa rezerwacja")
+                .addCompanyReservationBasicContent(reservationToSave);
+        EmailContent clientMailContent = new EmailContent().setSubject("Poprawnie zarezerwowano termin")
+                .addClientReservationBasicContent(reservationToSave);
+
+        Collection<String> privileges = PrivilegesConverter.convertAuthoritiesToPrivilegesList(company.getAuthorities());
+        if(privileges.contains("MAIL_NOTIFICATION")) {
+            String eventHtmlLink = CalendarEventCreator.createEventHtmlLink(reservationToSave);
+            if (!eventHtmlLink.isEmpty()) {
+                redirectAttributes.addFlashAttribute("googleEventLink", eventHtmlLink);
+                companyMailContent.addGCalendar(eventHtmlLink);
+                clientMailContent.addGCalendar(eventHtmlLink);
+            }
+        }
+
+        try {
+            emailService.send(company.getMail(), companyMailContent);
+            emailService.send(currentClient.getMail(), clientMailContent);
+        } catch(Exception exception) {
+                System.out.println(exception.getMessage());
+        }
+    }
+
+    private Reservations prepareReservation(int id, Client currentClient) {
         Reservations reservationToSave = new Reservations();
         reservationToSave.setClient(currentClient);
         reservationToSave.setCompany(company);
@@ -119,11 +156,7 @@ public class ReservationController {
 
         reservationUnits = allAvailableReservationUnitList(calendar,reservations, companyService.getDuration());
 
-
-
         model.addAttribute("reservationsList", reservationUnits);
-
-
         return "reservation";
     }
 
@@ -136,7 +169,7 @@ public class ReservationController {
         LocalTime end = start.plusMinutes(duration);
         int id = 0;
 
-        while(start.isBefore(calendar.getEnd_hour()) || start.equals(calendar.getEnd_hour()))
+        while((start.isBefore(calendar.getEnd_hour()) || start.equals(calendar.getEnd_hour()))  && (end.isBefore(calendar.getEnd_hour()) || end.equals(calendar.getEnd_hour())))
         {
             boolean canBeAdded = true;
             System.out.println("/t" + id + "/t");

@@ -38,6 +38,8 @@ public class CompanyScheduleController {
 
         if(isRowInDB(companySchedule) || !isDayValid(companySchedule))
             return "redirect:/company/companySchedule?wrongDay=true";
+        if(companySchedule.getStart_hour().isAfter(companySchedule.getEnd_hour()))
+            return  "redirect:/company/companySchedule?wrongHour=true";
 
         try
         {
