@@ -54,7 +54,7 @@ public class UrlAuthenticationSuccessHandler implements AuthenticationSuccessHan
         }
 
         if (isUser) {
-            return "/logout";
+            return "/user";
         } else if (isCompany) {
             return "/company";
         } else {
