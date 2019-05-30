@@ -19,7 +19,7 @@ public class Company extends BaseEntity {
 
     @NotBlank(message = "Uzupełnij pole", groups = {editEntity.class, Default.class})
     @Email(groups = editEntity.class)
-    @UniqueEmailCheck(message = "login already used")
+    @UniqueEmailCheck(message = "Podany login jest już zajęty")
     private String mail;
 
     @Column
