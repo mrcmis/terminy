@@ -5,7 +5,6 @@ import com.fis.is.terminy.models.Client;
 import com.fis.is.terminy.models.Company;
 import com.fis.is.terminy.repositories.ClientRepository;
 import com.fis.is.terminy.repositories.CompanyRepository;
-import com.fis.is.terminy.validation.BlankLoginValidationGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,16 +66,6 @@ public class AuthenticationController {
         model.addAttribute("company", new Company());
 
         return "login";
-    }
-
-    //TODO
-    @PostMapping("/login")
-    public String login(@Valid Client client, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
-            return "register";
-        }
-
-        return "redirect:/login";
     }
 
     @GetMapping(value = "/login/{codedCompany}")
