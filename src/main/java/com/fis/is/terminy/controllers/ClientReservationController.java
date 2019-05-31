@@ -38,6 +38,7 @@ public class ClientReservationController {
         List<Reservations> reservationsUnits = reservationsRepository.findByCompanyIdAndClientId(companyInSession.getId(), currentClient.getId());
         reservationsUnits.sort((Reservations reservation1, Reservations reservation2)-> reservation2.getDate().compareTo(reservation1.getDate()));
         model.addAttribute("reservationsList", reservationsUnits);
+        model.addAttribute("reservationsListSize", reservationsUnits.size());
         return "clientReservations";
     }
 
