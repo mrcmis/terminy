@@ -11,6 +11,7 @@
     <style type="text/css">
         body{ font: 14px sans-serif; text-align: center; }
         .wrapper{ width: 350px; padding: 20px; margin:auto; }
+        .input-group_flex{ position: relative; display: inline-table; border-collapse: separate;}
     </style>
 </head>
 <body>
@@ -50,26 +51,27 @@
             <div class="alert alert-success" th:if="${param.deleted}">
                 Usługa została usunięta!
             </div>
+<!--            <div class="wrapper">-->
             <div class="form-group">
                 <label class="col-md-4 control-label" for="name">Nazwa</label>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <input id="name" name="name" type="text" placeholder="Nazwa" class="form-control input-md" required="" th:field="*{name}">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="price">Cena</label>
                 <div class="col-md-2">
-                    <div class="input-group">
+                    <div class="input-group_flex">
                         <input id="price" name="price" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
                                placeholder="Cena" class="form-control" required="" th:field="*{price}">
-                        <span class="input-group-addon" style="width:1px">zł</span>
+                        <span class="input-group-addon" style="width:50px">  zł  </span>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="time">Czas trwania</label>
                 <div class="col-md-2">
-                    <div class="input-group">
+                    <div class="input-group_flex">
                         <input id="time" name="time" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
                                placeholder="Czas trwania" class="form-control" required="" th:field="*{duration}">
                         <span class="input-group-addon" style="width:1px">min.</span>
@@ -82,6 +84,7 @@
                     <button id="add" name="add" class="btn btn-primary" >Dodaj</button>
                 </div>
             </div>
+<!--            </div>-->
         </fieldset>
     </form>
     <table class="table table-hover" style="width:80%; margin:auto;">
