@@ -60,6 +60,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/register").permitAll()
                 .antMatchers("/home/**").hasAnyAuthority("USER", "COMPANY")
                 .antMatchers("/user/**").hasAnyAuthority("USER")
+                .antMatchers("/company/blockingUsers/**").hasAnyAuthority("BLOCKING_USERS")
                 .antMatchers("/company/**").hasAnyAuthority("COMPANY")
                 .antMatchers("/editClient").hasAnyAuthority("USER")
                 .antMatchers("/editCompany").hasAnyAuthority("COMPANY")
@@ -80,6 +81,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login").and()
                 .exceptionHandling()
                 .accessDeniedPage("/access-denied");
+
+        //for iframe
+        http.headers().frameOptions().disable();
     }
 
     @Override

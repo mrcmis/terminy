@@ -6,17 +6,20 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.groups.Default;
 
 @Entity
 public class Client extends BaseEntity {
     @Column
+    @Pattern(regexp = "\\+*[0-9 -]{4,15}",
+    message = "podaj poprawny numer telefonu", groups = {editEntity.class, Default.class})
     @NotBlank(message = "Uzupełnij pole", groups = {editEntity.class, Default.class})
     private String phone;
 
     @Column(unique = true)
     @NotBlank(message = "Uzupełnij pole", groups = {editEntity.class, Default.class})
-    @Email(groups = editEntity.class)
+    @Email(groups = {editEntity.class, Default.class}, message = "podaj poprawny adres email")
     @UniqueEmailCheck(message = "użytkownik o takim mailu istnieje")
     private String mail;
 
