@@ -31,6 +31,12 @@ public class Client extends BaseEntity {
     @NotBlank(message = "Uzupełnij pole")
     private String surname;
 
+    @Column
+    private String resetToken;
+
+    public String getResetToken() { return resetToken;}
+
+    public void setResetToken(String resetToken) { this.resetToken = resetToken; }
 
     public String getPhone() {
         return phone;
