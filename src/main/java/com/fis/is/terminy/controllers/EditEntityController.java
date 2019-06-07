@@ -49,6 +49,7 @@ public class EditEntityController {
             toEdit.setMail(company.getMail());
             toEdit.setPhone(company.getPhone());
             toEdit.setName(company.getName());
+            toEdit.setPassword(company.getPassword());
             companyRepository.save(toEdit);
             return "redirect:/logout";
         }
@@ -63,6 +64,7 @@ public class EditEntityController {
             Client toEdit = clientRepository.getOne(logged.getId());
             toEdit.setMail(client.getMail());
             toEdit.setPhone(client.getPhone());
+            toEdit.setPassword(client.getPassword());
             clientRepository.save(toEdit);
             return "redirect:/logout";
         }
