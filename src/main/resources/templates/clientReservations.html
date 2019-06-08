@@ -46,11 +46,12 @@
         Nie można anulować wybranego terminu!
     </div>
 </fieldset>
+<div style=" width:60%; margin:auto; margin-bottom:15px; border-bottom: 1px solid #e5e5e5;"><h1>Twoje rezerwacje</h1></div>
+
 <div th:if="${reservationsListSize}==0">
     <div>Brak zarezerwowanych terminów</div>
 </div>
 <div th:unless="${reservationsListSize}==0">
-    <p>Moje rezerwacje</p>
     <table class="table table-hover" style="width:80%; margin:auto;">
         <thead>
         <tr>
