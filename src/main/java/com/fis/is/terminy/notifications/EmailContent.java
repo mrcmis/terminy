@@ -1,8 +1,10 @@
 package com.fis.is.terminy.notifications;
 
 import com.fis.is.terminy.models.Client;
+import com.fis.is.terminy.models.Company;
 import com.fis.is.terminy.models.CompanyService;
 import com.fis.is.terminy.models.Reservations;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 public class EmailContent {
 
@@ -25,9 +27,10 @@ public class EmailContent {
     }
 
     public EmailContent addClientReservationBasicContent(Reservations reservation) {
+        Company currentCompany = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         CompanyService companyService = reservation.getService();
         text.append(String.format("Dokonano poprawnej rezerwacji: %s - %s\nTermin: %s\n" +
-                "Czas trwania: %s min, cena: %d zł", reservation.getCompany().getName(), companyService.getName(),
+                "Czas trwania: %s min, cena: %d zł", currentCompany.getName(), companyService.getName(),
                 reservationDateTime(reservation), companyService.getDuration(), companyService.getPrice()));
         return this;
     }

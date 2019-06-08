@@ -2,9 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="resources/style.css">
-    <link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Terminy - firma</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,39 +27,64 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li><a href="/company"><span class="glyphicon glyphicon-list"></span> Twoja firma</a></li>
+                <li class="active"><a href="/company"><span class="glyphicon glyphicon-list"></span> Twoja firma</a></li>
                 <li><a href="/company/companySchedule"><span class="glyphicon glyphicon-calendar"></span> Kalendarz</a></li>
                 <li><a href="/company/companyServices"><span class="glyphicon glyphicon-plus"></span> Usługi</a></li>
                 <li><a href="/company/companyWorkplace"><span class="glyphicon glyphicon-plus"></span> Stanowiska</a></li>
                 <li><a href="/company/blockingUsers"><span class="glyphicon glyphicon-ban-circle"></span> Blokowanie użytkowników</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="/company/editCompany"><span class="glyphicon glyphicon-user"></span> Twoje konto</a></li>
+                <li><a href="/company/editCompany"><span class="glyphicon glyphicon-user"></span> Twoje konto</a></li>
                 <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Wyloguj</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div id = "main">
-    <form class="w3-container" action="#" th:action="@{/company/editCompany}" th:object="${company}" method="post">
+<form class="form-horizontal" action="#" th:action="@{/company/companyWorkplace}" th:object="${companyWorkplace}" method="post">
+    <fieldset style="text-align: center;">
+        <legend style=" width:60%; margin:auto; margin-bottom:15px;"><h1>Dodaj stanowisko pracy</h1></legend>
+        <div class="alert alert-danger" th:if="${param.error}">
+            Wystąpił błąd!
+        </div>
 
-        <label class="w3-text-red"><b>Email</b></label>
-        <input class="w3-input w3-border" type="text" name="mail" th:field="*{mail}">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p>
+        <div class="alert alert-danger" th:if="${param.duplicate}">
+            Dane stanowisko już istnieje!
+        </div>
+        <div class="alert alert-success" th:if="${param.added}">
+            Stanowsko dodane!
+        </div>
 
-        <label class="w3-text-red"><b>Name</b></label>
-        <input class="w3-input w3-border" type="text" name="name" th:field="*{name}">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="name">Nazwa stanowiska</label>
+            <div class="col-md-2">
+                <input id="name" name="name" type="text" placeholder="Nazwa" class="form-control input-md" required="" th:field="*{name}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="add"></label>
+            <div class="col-md-4">
+                <button id="add" name="add" class="btn btn-primary">Dodaj</button>
+            </div>
+        </div>
 
-        <label class="w3-text-red"><b>Phone</b></label>
-        <input class="w3-input w3-border" type="text" name="phone" th:field="*{phone}">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
+    </fieldset>
+</form>
 
-        <br><button class="w3-btn w3-red" type="submit" id="button_submit">Edit</button>
-
-    </form>
-
+<div th:unless="${companyWorkplaceListSize}==0">
+    <table class="table table-hover" style="width:80%; margin:auto;">
+        <thead>
+        <tr>
+            <th>Stanowisko</th>
+        </tr>
+        </thead>
+        <th:block th:each="companyWorkplace : ${companyWorkplaceList}">
+            <tr style="text-align: left;">
+                <td th:text="${companyWorkplace.name}">...</td>
+            </tr>
+        </th:block>
+    </table>
 </div>
+
 </body>
 </html>

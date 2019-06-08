@@ -7,6 +7,7 @@ import com.fis.is.terminy.notifications.EmailContent;
 import com.fis.is.terminy.notifications.EmailService;
 import com.fis.is.terminy.repositories.CompanyScheduleRepository;
 import com.fis.is.terminy.repositories.CompanyServiceRepository;
+import com.fis.is.terminy.repositories.CompanyWorkplaceRepository;
 import com.fis.is.terminy.repositories.ReservationsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -39,11 +40,15 @@ public class ReservationController {
     @Autowired
     private CompanyScheduleRepository companyScheduleRepository;
     @Autowired
+    private CompanyWorkplaceRepository companyWorkplaceRepository;
+
+    @Autowired
     private EmailService emailService;
 
 
     private Long serviceId;
     private Company company;
+    private CompanyWorkplace companyWorkplace;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
@@ -111,7 +116,7 @@ public class ReservationController {
 
         Collection<String> privileges = PrivilegesConverter.convertAuthoritiesToPrivilegesList(company.getAuthorities());
         if(privileges.contains("MAIL_NOTIFICATION")) {
-            String eventHtmlLink = CalendarEventCreator.createEventHtmlLink(reservationToSave);
+            String eventHtmlLink = CalendarEventCreator.createEventHtmlLink(reservationToSave, company);
             if (!eventHtmlLink.isEmpty()) {
                 redirectAttributes.addFlashAttribute("googleEventLink", eventHtmlLink);
                 companyMailContent.addGCalendar(eventHtmlLink);
@@ -130,7 +135,7 @@ public class ReservationController {
     private Reservations prepareReservation(int id, Client currentClient) {
         Reservations reservationToSave = new Reservations();
         reservationToSave.setClient(currentClient);
-        reservationToSave.setCompany(company);
+        reservationToSave.setCompanyWorkplace(companyWorkplace);
         reservationToSave.setService(companyServiceRepository.findByIdAndCompanyId(serviceId,company.getId()).get());
         reservationToSave.setDate(date);
         reservationToSave.setStart_hour(reservationUnits.get(id).getStart_hour());
@@ -144,8 +149,8 @@ public class ReservationController {
         System.out.println("DATE "  +  calendar.getDate());
         date = calendar.getDate();
         CompanyService companyService = companyServiceRepository.findByIdAndCompanyId(serviceId,company.getId()).get();
-        Optional<CompanySchedule> companyScheduleOptional = companyScheduleRepository.findByCompanyIdAndDay(company.getId(), calendar.getDayName());
-        List<Reservations> reservations = reservationsRepository.findAllByCompanyIdAndDate(company.getId(), date);
+        Optional<CompanySchedule> companyScheduleOptional = companyScheduleRepository.findByCompanyWorkplaceIdAndDay(companyWorkplace.getId(), calendar.getDayName());
+        List<Reservations> reservations = reservationsRepository.findAllByCompanyWorkplaceIdAndDate(companyWorkplace.getId(), date);
 
         if(!companyScheduleOptional.isPresent())
             return "redirect:/user/reservation?error=true";

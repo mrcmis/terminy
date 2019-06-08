@@ -21,8 +21,8 @@ public class CompanySchedule {
     private LocalTime end_hour;
 
     @ManyToOne(fetch = FetchType.LAZY, optional=false)
-    @JoinColumn(name="company_id", nullable = false)
-    private Company company;
+    @JoinColumn(name="workplace_id", nullable = false)
+    private CompanyWorkplace companyWorkplace;
 
     public Long getId() {
         return id;
@@ -41,8 +41,8 @@ public class CompanySchedule {
     public LocalTime getEnd_hour() {return  end_hour;}
     public void setEnd_hour(LocalTime end_hour) {this.end_hour = end_hour;}
 
-    public Company getCompany() {return company;}
-    public void setCompany(Company company) {this.company = company;}
+    public CompanyWorkplace getCompanyWorkplace() {return companyWorkplace;}
+    public void setCompany(CompanyWorkplace companyWorkplace) {this.companyWorkplace = companyWorkplace;}
 
 
 

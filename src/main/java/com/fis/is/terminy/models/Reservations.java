@@ -13,8 +13,8 @@ public class Reservations {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional=false)
-    @JoinColumn(name="company_id", nullable = false)
-    private Company company;
+    @JoinColumn(name="workplace_id", nullable = false)
+    private CompanyWorkplace companyWorkplace;
 
     @ManyToOne(fetch = FetchType.LAZY, optional=false)
     @JoinColumn(name="client_id", nullable = false)
@@ -37,8 +37,8 @@ public class Reservations {
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
 
-    public Company getCompany() {return company;}
-    public void setCompany(Company company) {this.company = company;}
+    public CompanyWorkplace getCompanyWorkplace() {return companyWorkplace;}
+    public void setCompanyWorkplace(CompanyWorkplace companyWorkplace) {this.companyWorkplace = companyWorkplace;}
 
     public Client getClient() {return client;}
     public void setClient(Client client) {this.client = client;}
