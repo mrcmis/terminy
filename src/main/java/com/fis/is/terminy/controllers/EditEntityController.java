@@ -7,6 +7,7 @@ import com.fis.is.terminy.repositories.ClientRepository;
 import com.fis.is.terminy.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,9 @@ public class EditEntityController {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/user/editClient")
     public String editUser(Model model){
@@ -49,7 +53,9 @@ public class EditEntityController {
             toEdit.setMail(company.getMail());
             toEdit.setPhone(company.getPhone());
             toEdit.setName(company.getName());
-            toEdit.setPassword(company.getPassword());
+            if(!company.getPassword().isEmpty()){
+                toEdit.setPassword(bCryptPasswordEncoder.encode(company.getPassword()));
+            }
             companyRepository.save(toEdit);
             return "redirect:/logout";
         }
@@ -64,7 +70,10 @@ public class EditEntityController {
             Client toEdit = clientRepository.getOne(logged.getId());
             toEdit.setMail(client.getMail());
             toEdit.setPhone(client.getPhone());
-            toEdit.setPassword(client.getPassword());
+            if(!client.getPassword().isEmpty()){
+                toEdit.setPassword(bCryptPasswordEncoder.encode(client.getPassword()));
+            }
+
             clientRepository.save(toEdit);
             return "redirect:/logout";
         }

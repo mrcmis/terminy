@@ -48,14 +48,13 @@ public class PasswordController {
             clientService.save(client);
 
             String appUrl = request.getScheme() + "://" + request.getServerName();
-            String port  = ":8080";
 
             SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
             passwordResetEmail.setFrom("terminy.io@gmail.com");
             passwordResetEmail.setTo(client.getMail());
             passwordResetEmail.setSubject("Zmiana hasła");
-            passwordResetEmail.setText("W celu zresetowanie hasła, proszę wejść w poniższy link:\n" + appUrl + port
-                    + "/resetPassword?token=" + client.getResetToken());
+            passwordResetEmail.setText("W celu zresetowanie hasła, proszę wejść w poniższy link:\n" + appUrl +
+                     "/resetPassword?token=" + client.getResetToken());
 
             emailServ.sendEmail(passwordResetEmail);
 
@@ -68,14 +67,13 @@ public class PasswordController {
             companyService.save(company);
 
             String appUrl = request.getScheme() + "://" + request.getServerName();
-            String port  = ":8080";
 
             SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
             passwordResetEmail.setFrom("terminy.io@gmail.com");
             passwordResetEmail.setTo(company.getMail());
             passwordResetEmail.setSubject("Zmiana hasła");
-            passwordResetEmail.setText("W celu zresetowanie hasła, proszę wejść w poniższy link:\n" + appUrl + port
-                    + "/resetPassword?token=" + company.getResetToken());
+            passwordResetEmail.setText("W celu zresetowanie hasła, proszę wejść w poniższy link:\n" + appUrl +
+                     "/resetPassword?token=" + company.getResetToken());
 
             emailServ.sendEmail(passwordResetEmail);
 
