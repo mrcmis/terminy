@@ -98,7 +98,10 @@ function send_login_data($login, $password, $email, $name, $coded_name, $blockin
             $addition .= " - możliowść generowania raportów\n";
         $html_button = "\nKod umożliwiający przekierowanie klientów bezpośrednio na stronę z rezerwacjami:\n" . 
         "<a href='http://io-terminy.herokuapp.com/login/" . $coded_name . "' style='background:linear-gradient(#3d85c6, #073763); border-radius: 5px; padding: 8px 20px; color: #ffffff;display: inline-block; font-size: 16px; text-align: center;'>Zarezerwuj termin</a>";
-        $mail->Body = $page_address . $login_data . $addition . $html_button;
+        
+        $html_iframe = "\nKod umożliwiający wbudowanie aplikacji w stronę internetową:\n" . 
+        "<iframe src='http://io-terminy.herokuapp.com/login/" . $coded_name . "' width='500px' height='600px'></iframe>";
+        $mail->Body = $page_address . $login_data . $addition . $html_button . $html_iframe;
 
         $mail->send();
 
