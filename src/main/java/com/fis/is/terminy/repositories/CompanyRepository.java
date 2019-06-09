@@ -11,4 +11,5 @@ public interface CompanyRepository extends JpaRepository<Company, Long>, CustomC
     Optional<Company> findByLogin(String login);
     Optional<Company> findByCodedName(String codedName);
     Optional<Company> findByMail(String mail);
+    Optional<Company> findByResetToken(String resetToken);
 }

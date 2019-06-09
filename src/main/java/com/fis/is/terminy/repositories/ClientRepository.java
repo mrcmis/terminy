@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface ClientRepository extends JpaRepository<Client, Long>, CustomClientRepository {
     Optional<Client> findByLogin(String login);
     Optional<Client> findByMail(String mail);
+    Optional<Client> findByResetToken(String resetToken);
 }
