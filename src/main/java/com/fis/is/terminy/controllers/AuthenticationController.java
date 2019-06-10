@@ -45,27 +45,7 @@ public class AuthenticationController {
             return "register";
         }
         clientRepository.saveModifiedClient(client);
-        return "redirect:/login";
-    }
-
-    @GetMapping("/login")
-    public String login(Model model){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if(!(auth instanceof AnonymousAuthenticationToken)) {
-            Collection<String> privileges = PrivilegesConverter.convertAuthoritiesToPrivilegesList(auth.getAuthorities());
-            if(privileges.contains("USER")){
-                return "redirect:/user";
-            } else if(privileges.contains("COMPANY")){
-                return "redirect:/company";
-            }
-        }
-
-        Client client = new Client();
-        model.addAttribute("client", client);
-        model.addAttribute("company", new Company());
-
-        return "login";
+        return "redirect:/terminyHome";
     }
 
     @GetMapping(value = "/login/{codedCompany}")
