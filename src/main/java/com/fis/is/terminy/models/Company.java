@@ -30,11 +30,17 @@ public class Company extends BaseEntity {
     @NotBlank(message = "Uzupełnij pole")
     private String codedName;
 
+    @Column
+    private String resetToken;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = BaseEntity.class)
     @JoinTable(name = "blockedUsers", joinColumns = @JoinColumn(name = "company_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<? extends BaseEntity> blockedUsers = new HashSet<BaseEntity>();
 
+    public String getResetToken() { return resetToken;}
+
+    public void setResetToken(String resetToken) { this.resetToken = resetToken; }
 
     public String getPhone() {
         return phone;

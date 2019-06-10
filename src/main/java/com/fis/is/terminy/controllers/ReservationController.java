@@ -103,9 +103,16 @@ public class ReservationController {
             return "redirect:/user/reservation?notsaved=true";
         }
 
+        setConfirmation(redirectAttributes, reservationToSave);
         notifyUsers(redirectAttributes, currentClient, reservationToSave);
 
         return "redirect:/user";
+    }
+
+    private void setConfirmation(RedirectAttributes redirectAttributes, Reservations reservationToSave) {
+        String confirmation = String.format("%s - %s, %s", reservationToSave.getService().getName(),
+                reservationToSave.getDate(), reservationToSave.getStart_hour());
+        redirectAttributes.addFlashAttribute("confirmation", confirmation);
     }
 
     private void notifyUsers(RedirectAttributes redirectAttributes, Client currentClient, Reservations reservationToSave) {
