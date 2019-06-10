@@ -26,8 +26,8 @@ public class EmailContent {
         return this;
     }
 
-    public EmailContent addClientReservationBasicContent(Reservations reservation) {
-        Company currentCompany = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public EmailContent addClientReservationBasicContent(Reservations reservation, Company currentCompany) {
+       // Company currentCompany = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         CompanyService companyService = reservation.getService();
         text.append(String.format("Dokonano poprawnej rezerwacji: %s - %s\nTermin: %s\n" +
                 "Czas trwania: %s min, cena: %d zł", currentCompany.getName(), companyService.getName(),

@@ -50,6 +50,14 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-md-4 control-label" for="workname">Stanowisko</label>
+            <div class="col-md-1">
+                <select name="workname" th:field="*{workplaceId}">
+                    <option th:each="place : ${workplaceList}"  th:value="${place.id}" th:text="${place.name}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-md-4 control-label" for="add"></label>
             <div class="col-md-4">
                 <button id="add" name="add" class="btn btn-primary">Wybierz</button>

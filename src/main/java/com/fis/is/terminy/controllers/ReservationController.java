@@ -71,8 +71,10 @@ public class ReservationController {
     }
 
     @GetMapping("user/reservation")
-    public String getDate(@Valid Calendar calendar)
+    public String getDate(@Valid Calendar calendar, Model model)
     {
+        List<CompanyWorkplace> companyWorkplaceList = companyWorkplaceRepository.findAllByCompanyId(company.getId());
+        model.addAttribute("workplaceList", companyWorkplaceList);
         return "reservation";
     }
 
@@ -112,7 +114,7 @@ public class ReservationController {
         EmailContent companyMailContent = new EmailContent().setSubject("Nowa rezerwacja")
                 .addCompanyReservationBasicContent(reservationToSave);
         EmailContent clientMailContent = new EmailContent().setSubject("Poprawnie zarezerwowano termin")
-                .addClientReservationBasicContent(reservationToSave);
+                .addClientReservationBasicContent(reservationToSave, company);
 
         Collection<String> privileges = PrivilegesConverter.convertAuthoritiesToPrivilegesList(company.getAuthorities());
         if(privileges.contains("MAIL_NOTIFICATION")) {
@@ -146,6 +148,7 @@ public class ReservationController {
     @PostMapping("user/reservation")
     public String printTerms(@Valid Calendar calendar, Model model)
     {
+        companyWorkplace = companyWorkplaceRepository.findById(calendar.getWorkplaceId()).get();
         System.out.println("DATE "  +  calendar.getDate());
         date = calendar.getDate();
         CompanyService companyService = companyServiceRepository.findByIdAndCompanyId(serviceId,company.getId()).get();
@@ -162,6 +165,8 @@ public class ReservationController {
         reservationUnits = allAvailableReservationUnitList(calendar,reservations, companyService.getDuration());
 
         model.addAttribute("reservationsList", reservationUnits);
+        List<CompanyWorkplace> companyWorkplaceList = companyWorkplaceRepository.findAllByCompanyId(company.getId());
+        model.addAttribute("workplaceList", companyWorkplaceList);
         return "reservation";
     }
 
