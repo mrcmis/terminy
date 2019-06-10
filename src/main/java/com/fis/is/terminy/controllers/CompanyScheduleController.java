@@ -2,6 +2,7 @@ package com.fis.is.terminy.controllers;
 
 import com.fis.is.terminy.models.Company;
 import com.fis.is.terminy.models.CompanySchedule;
+import com.fis.is.terminy.models.CompanyScheduleHelper;
 import com.fis.is.terminy.models.CompanyWorkplace;
 import com.fis.is.terminy.repositories.CompanyScheduleRepository;
 import com.fis.is.terminy.repositories.CompanyWorkplaceRepository;
@@ -29,7 +30,7 @@ public class CompanyScheduleController {
     private CompanyWorkplaceRepository companyWorkplaceRepository;
 
     @GetMapping("company/companySchedule")
-    public String printCompanyWorkingDaysAndHours(@Valid CompanySchedule companySchedule, Model model, Pageable pageable)
+    public String printCompanyWorkingDaysAndHours(@Valid CompanyScheduleHelper companyScheduleHelper, Model model, Pageable pageable)
     {
         List<CompanySchedule> companyScheduleList = new ArrayList<CompanySchedule>();
         Company currentCompany = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -37,21 +38,34 @@ public class CompanyScheduleController {
        // model.addAttribute("dayList", companyScheduleRepository.findByCompanyId(currentCompany.getId(), pageable).getContent());
         for(CompanyWorkplace companyWorkplace : companyWorkplaceList)
         {
-            companyScheduleList.add(companyScheduleRepository.findByCompanyWorkplaceId(companyWorkplace.getId()).get());
+            if(companyScheduleRepository.findByCompanyWorkplaceId(companyWorkplace.getId()).isPresent())
+                 companyScheduleList.add(companyScheduleRepository.findByCompanyWorkplaceId(companyWorkplace.getId()).get());
+            System.out.println(companyWorkplace.getCompany() + " " + companyWorkplace.getName());
         }
         model.addAttribute("dayList", companyScheduleList);
+        model.addAttribute("dayListSize", companyScheduleList.size());
+
+        model.addAttribute("workplaceList", companyWorkplaceList);
         return "companySchedule";
     }
 
    @PostMapping("company/companySchedule")
-    public String createWorkingDay(@Valid CompanySchedule companySchedule)
+    public String createWorkingDay(@Valid CompanyScheduleHelper companyScheduleHelper)
     {
         Company currentCompany = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //companySchedule.setCompany(currentCompany);
+        System.out.println(companyScheduleHelper.getStart_hour() + " " + companyScheduleHelper.getDay() + " " + companyScheduleHelper.getEnd_hour() + " " + companyScheduleHelper.getWorkplaceName()
+        + " " + companyScheduleHelper.getId());
 
-        if(isRowInDB(companySchedule) || !isDayValid(companySchedule))
+        CompanyWorkplace companyWorkplace  = companyWorkplaceRepository.findById(companyScheduleHelper.getId()).get();
+        CompanySchedule companySchedule = new CompanySchedule();
+        companySchedule.setDay(companyScheduleHelper.getDay());
+        companySchedule.setStart_hour(companyScheduleHelper.getStart_hour());
+        companySchedule.setEnd_hour(companyScheduleHelper.getEnd_hour());
+        companySchedule.setCompanyWorkplace(companyWorkplace);
+        if(isRowInDB(companySchedule))
             return "redirect:/company/companySchedule?wrongDay=true";
-        if(companySchedule.getStart_hour().isAfter(companySchedule.getEnd_hour()))
+        if(companyScheduleHelper.getStart_hour().isAfter(companyScheduleHelper.getEnd_hour()))
             return  "redirect:/company/companySchedule?wrongHour=true";
 
         try
@@ -80,16 +94,5 @@ public class CompanyScheduleController {
         return companyScheduleRepository.findByCompanyWorkplaceIdAndDay(companySchedule.getCompanyWorkplace().getId(), companySchedule.getDay()).isPresent();
     }
 
-    private boolean isDayValid(CompanySchedule companySchedule)
-    {
-        String[] days = {"Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"};
-
-        boolean isValid = false;
-        for (String day : days) {
-            if(companySchedule.getDay().equals(day))
-                isValid = true;
-        }
-        return isValid;
-    }
 
 }

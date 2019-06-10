@@ -1,28 +1,18 @@
 package com.fis.is.terminy.models;
 
-
-import javax.persistence.*;
 import java.time.LocalTime;
 
-@Entity
-public class CompanySchedule {
+public class CompanyScheduleHelper {
 
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
-
-    @Column
+    private Long id;
     private String day;
 
-    @Column
     private LocalTime start_hour;
 
-    @Column
     private LocalTime end_hour;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional=false)
-    @JoinColumn(name="workplace_id", nullable = false)
-    private CompanyWorkplace companyWorkplace;
+    private String workplaceName;
+
 
     public Long getId() {
         return id;
@@ -41,9 +31,7 @@ public class CompanySchedule {
     public LocalTime getEnd_hour() {return  end_hour;}
     public void setEnd_hour(LocalTime end_hour) {this.end_hour = end_hour;}
 
-    public CompanyWorkplace getCompanyWorkplace() {return companyWorkplace;}
-    public void setCompanyWorkplace(CompanyWorkplace companyWorkplace) {this.companyWorkplace = companyWorkplace;}
-
-
+    public String getWorkplaceName() {return this.workplaceName;}
+    public void setCompany(String workplaceName) {this.workplaceName = workplaceName;}
 
 }
