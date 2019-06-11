@@ -69,9 +69,9 @@
         <th:block th:each="reservation : ${reservationsList}">
             <tr style="text-align: left;">
                 <td th:text="${reservation.date} + ', ' + ${reservation.start_hour}">...</td>
-                <td th:text="${reservation.service.name}">...</td>
-                <td th:text="${reservation.client.name}+ ' ' + ${reservation.client.surname}">...</td>
-                <td th:text="${reservation.client.mail} + ', ' + ${reservation.client.phone}">...</td>
+                <td th:text="${reservation.serviceName}">...</td>
+                <td th:text="${reservation.name}+ ' ' + ${reservation.surname}">...</td>
+                <td th:text="${reservation.mail} + ', ' + ${reservation.phone}">...</td>
                 <td>
                     <form  action="#" th:action="@{/company/delete/__${reservation.id}__}" th:method="delete" >
                         <input type="hidden" name="_method" value="delete" />

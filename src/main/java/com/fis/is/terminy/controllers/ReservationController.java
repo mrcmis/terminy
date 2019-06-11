@@ -105,8 +105,8 @@ public class ReservationController {
             return "redirect:/user/reservation?notsaved=true";
         }
 
-        setConfirmation(redirectAttributes, reservationToSave);
-        notifyUsers(redirectAttributes, currentClient, reservationToSave);
+        /*setConfirmation(redirectAttributes, reservationToSave);
+        notifyUsers(redirectAttributes, currentClient, reservationToSave);*/
 
         return "redirect:/user";
     }
@@ -119,7 +119,7 @@ public class ReservationController {
 
     private void notifyUsers(RedirectAttributes redirectAttributes, Client currentClient, Reservations reservationToSave) {
         EmailContent companyMailContent = new EmailContent().setSubject("Nowa rezerwacja")
-                .addCompanyReservationBasicContent(reservationToSave);
+                .addCompanyReservationBasicContent(reservationToSave, currentClient);
         EmailContent clientMailContent = new EmailContent().setSubject("Poprawnie zarezerwowano termin")
                 .addClientReservationBasicContent(reservationToSave, company);
 
@@ -189,7 +189,7 @@ public class ReservationController {
         while((start.isBefore(calendar.getEnd_hour()) || start.equals(calendar.getEnd_hour()))  && (end.isBefore(calendar.getEnd_hour()) || end.equals(calendar.getEnd_hour())))
         {
             boolean canBeAdded = true;
-            System.out.println("/t" + id + "/t");
+           // System.out.println("/t" + id + "/t");
             for (Reservations reservation : reservations)
             {
                 if(!canBeReserved(start,end, reservation.getStart_hour(), reservation.getEnd_hour()))

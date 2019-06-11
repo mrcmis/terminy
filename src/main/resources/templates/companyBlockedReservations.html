@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodaj plan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    <style type="text/css">
+        body{ font: 14px sans-serif; text-align: center; }
+        .wrapper{ width: 350px; padding: 20px; margin:auto; }
+        .input-group_flex{ position: relative; display: inline-table; border-collapse: separate;}
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Terminy</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="/company"><span class="glyphicon glyphicon-list"></span> Twoja firma</a></li>
+                <li class="active"><a href="/company/companySchedule"><span class="glyphicon glyphicon-calendar"></span> Kalendarz</a></li>
+                <li><a href="/company/companyServices"><span class="glyphicon glyphicon-plus"></span> Usługi</a></li>
+                <li><a href="/company/companyWorkplace"><span class="glyphicon glyphicon-plus"></span> Stanowiska</a></li>
+                <li><a href="/company/blockingUsers"><span class="glyphicon glyphicon-ban-circle"></span> Blokowanie użytkowników</a></li>
+                <li><a href="/company/Report"><span class="glyphicon glyphicon-list-alt"></span> Raporty</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/company/editCompany"><span class="glyphicon glyphicon-user"></span> Twoje konto</a></li>
+                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Wyloguj</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<form class="form-horizontal" action="#" th:action="@{/company/blockReservation}" th:object="${companyScheduleHelper}" method="post">
+    <fieldset style="text-align: center;">
+        <legend style=" width:60%; margin:auto; margin-bottom:15px;"><h1>Zablokuj rezerwacje</h1></legend>
+        <div class="alert alert-danger" th:if="${param.error}">
+            Wystąpił błąd! Spróbuj ponownie później.
+        </div>
+        <div class="alert alert-danger" th:if="${param.wrongHour}">
+            Nie można zablokować tego terminu ponieważ jest już zajęty przz klienta!
+        </div>
+        <div class="alert alert-danger" th:if="${param.wrongDay}">
+            Proszę podać poprawny dzień!
+        </div>
+        <div class="alert alert-success" th:if="${param.added}">
+            Poprawnie dodano termin!
+        </div>
+        <div class="alert alert-success" th:if="${param.deleted}">
+            Termin usunięty!
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="data">Data</label>
+            <div class="col-md-2">
+                <div class="input-group">
+                    <input id="data" name="data" type="date" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                           placeholder="Data" class="form-control" required="" th:field="*{date}"/>
+                </div>
+            </div>
+        </div>
+            <!--            </div>-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="time_start">Godzina początkowa</label>
+                <div class="col-md-2">
+                    <div class="input-group_flex">
+                        <input id="time_start" name="time" type="time" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                               placeholder="Godzina poczatkowa" class="form-control" required="" th:field="*{start_hour}">
+                        <span class="input-group-addon" style="width:1px">h</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="time_end">Godzina końcowa</label>
+                <div class="col-md-2">
+                    <div class="input-group_flex">
+                        <input id="time_end" name="time" type="time" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                               placeholder="Godzina koncowa" class="form-control" required="" th:field="*{end_hour}">
+                        <span class="input-group-addon" style="width:1px">h</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="workname">Stanowisko</label>
+                <div class="col-md-1">
+                    <select name="workname" th:field="*{id}">
+                        <option th:each="place : ${workplaceList}"  th:value="${place.id}" th:text="${place.name}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="add"></label>
+                <div class="col-md-4">
+                    <button id="add" name="add" class="btn btn-primary">Dodaj</button>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+</body>
+</html>

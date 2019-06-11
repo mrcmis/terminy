@@ -18,7 +18,7 @@ public class Reservations {
 
     @ManyToOne(fetch = FetchType.LAZY, optional=false)
     @JoinColumn(name="client_id", nullable = false)
-    private Client client;
+    private BaseEntity client;
 
     @ManyToOne(fetch = FetchType.LAZY, optional=false)
     @JoinColumn(name="service_id", nullable = false)
@@ -42,8 +42,8 @@ public class Reservations {
     public CompanyWorkplace getCompanyWorkplace() {return companyWorkplace;}
     public void setCompanyWorkplace(CompanyWorkplace companyWorkplace) {this.companyWorkplace = companyWorkplace;}
 
-    public Client getClient() {return client;}
-    public void setClient(Client client) {this.client = client;}
+    public BaseEntity getClient() {return client;}
+    public void setClient(BaseEntity client) {this.client = client;}
 
     public CompanyService getService() {return service;}
     public void setService(CompanyService service) {this.service = service;}

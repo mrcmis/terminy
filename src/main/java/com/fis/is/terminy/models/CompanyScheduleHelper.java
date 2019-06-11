@@ -2,12 +2,16 @@ package com.fis.is.terminy.models;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class CompanyScheduleHelper {
 
     private Long id;
     private String day;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime start_hour;
@@ -36,5 +40,8 @@ public class CompanyScheduleHelper {
 
     public String getWorkplaceName() {return this.workplaceName;}
     public void setCompany(String workplaceName) {this.workplaceName = workplaceName;}
+
+    public LocalDate getDate() {return this.date;}
+    public void setDate(LocalDate date) {this.date=date;}
 
 }
