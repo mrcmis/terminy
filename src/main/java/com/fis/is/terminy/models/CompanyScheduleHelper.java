@@ -1,5 +1,7 @@
 package com.fis.is.terminy.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalTime;
 
 public class CompanyScheduleHelper {
@@ -7,8 +9,9 @@ public class CompanyScheduleHelper {
     private Long id;
     private String day;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime start_hour;
-
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime end_hour;
 
     private String workplaceName;

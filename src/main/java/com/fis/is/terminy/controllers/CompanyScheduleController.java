@@ -38,9 +38,12 @@ public class CompanyScheduleController {
        // model.addAttribute("dayList", companyScheduleRepository.findByCompanyId(currentCompany.getId(), pageable).getContent());
         for(CompanyWorkplace companyWorkplace : companyWorkplaceList)
         {
-            if(companyScheduleRepository.findByCompanyWorkplaceId(companyWorkplace.getId()).isPresent())
-                 companyScheduleList.add(companyScheduleRepository.findByCompanyWorkplaceId(companyWorkplace.getId()).get());
-            System.out.println(companyWorkplace.getCompany() + " " + companyWorkplace.getName());
+            List<CompanySchedule> listCompanySchedule = companyScheduleRepository.findAllByCompanyWorkplaceId(companyWorkplace.getId());
+            if(listCompanySchedule!=null)
+                companyScheduleList.addAll(listCompanySchedule);
+           /* if(companyScheduleRepository.findByCompanyWorkplaceId(companyWorkplace.getId()).isPresent())
+                 companyScheduleList.add(companyScheduleRepository.findByCompanyWorkplaceId(companyWorkplace.getId()).get());*/
+
         }
         model.addAttribute("dayList", companyScheduleList);
         model.addAttribute("dayListSize", companyScheduleList.size());
