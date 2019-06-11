@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface CompanyScheduleRepository extends JpaRepository<CompanySchedule, Long> {
     Optional<CompanySchedule> findByCompanyWorkplaceId(Long companyWorkplaceId);
+    List<CompanySchedule> findAllByCompanyWorkplaceId(Long companyWorkplaceId);
     Optional<CompanySchedule> findById(Long id);
     Optional<CompanySchedule> findByCompanyWorkplaceIdAndDay(Long companyWorkplaceId, String day);
    // Page<CompanySchedule> findByCompanyId(Long companyId, Pageable pageable);

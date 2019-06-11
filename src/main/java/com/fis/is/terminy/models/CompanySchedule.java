@@ -1,6 +1,8 @@
 package com.fis.is.terminy.models;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalTime;
 
@@ -12,9 +14,11 @@ public class CompanySchedule {
    private Long id;
 
     @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private String day;
 
     @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime start_hour;
 
     @Column

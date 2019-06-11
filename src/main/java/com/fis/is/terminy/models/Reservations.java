@@ -29,9 +29,11 @@ public class Reservations {
     private LocalDate date;
 
     @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime start_hour = LocalTime.now();
 
     @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime end_hour = LocalTime.now();
 
     public Long getId() {return id;}
