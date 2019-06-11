@@ -59,8 +59,9 @@
         <p class="alert alert-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
 
         <label class="w3-text-red"><b>Password</b></label>
-        <input class="w3-input w3-border" type="text" name="password" th:field="*{password}">
+        <input class="w3-input w3-border" type="text" name="password" value="">
         <p class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+
 
         <br><button class="w3-btn w3-red" type="submit" id="button_submit">Edit</button>
 
