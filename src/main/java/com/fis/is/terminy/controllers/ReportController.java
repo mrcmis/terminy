@@ -1,5 +1,4 @@
 package com.fis.is.terminy.controllers;
-import com.fis.is.terminy.models.BaseEntity;
 import com.fis.is.terminy.models.Company;
 import com.fis.is.terminy.models.CompanyWorkplace;
 import com.fis.is.terminy.models.Reservations;
@@ -10,11 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -37,7 +33,6 @@ public class ReportController {
         Company company = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<Reservations> reservationsUnits = new ArrayList<>();
         List<CompanyWorkplace> companyWorkplaceList = companyWorkplaceRepository.findAllByCompanyId(company.getId());
-        // List<Reservations> reservationsUnits = reservationsRepository.findAllByCompanyId(company.getId());
         for(CompanyWorkplace companyWorkplace : companyWorkplaceList)
         {
             List<Reservations> list = reservationsRepository.findAllByCompanyWorkplaceId(companyWorkplace.getId());
@@ -94,18 +89,8 @@ public class ReportController {
 
         String[] workplaceArray = new String[workplace.size()];
         workplaceArray = workplace.toArray(workplaceArray);
-
-
-
         model.addAttribute("workplaceArray", workplaceArray);
         model.addAttribute("reservationPerWokrplace", reservationPerWokrplace);
-
-
-
-
-
-
-
 
         return "ReportGenerate";
     }
