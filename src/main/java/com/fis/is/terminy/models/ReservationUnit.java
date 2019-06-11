@@ -1,11 +1,15 @@
 package com.fis.is.terminy.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class ReservationUnit {
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime start_hour;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime end_hour;
     private int id;
 
