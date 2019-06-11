@@ -1,5 +1,6 @@
 package com.fis.is.terminy.notifications;
 
+import com.fis.is.terminy.models.Company;
 import com.fis.is.terminy.models.Reservations;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -16,6 +17,7 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -50,14 +52,14 @@ public class CalendarEventCreator {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    public static String createEventHtmlLink(Reservations newReservation) {
+    public static String createEventHtmlLink(Reservations newReservation, @SessionAttribute("company") Company companyInSession) {
         try {
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                     .setApplicationName(APPLICATION_NAME)
                     .build();
 
-            Event event = getSuppliedEvent(newReservation);
+            Event event = getSuppliedEvent(newReservation, companyInSession);
             String calendarId = "primary";
             event = service.events().insert(calendarId, event).execute();
 
@@ -77,9 +79,9 @@ public class CalendarEventCreator {
         return resultPrefix + eventId + resultSuffix;
     }
 
-    private static Event getSuppliedEvent(Reservations newReservation) {
+    private static Event getSuppliedEvent(Reservations newReservation,Company companyInSession) {
         String summary = newReservation.getService().getName();
-        String description = String.format("%s - %s", newReservation.getCompany().getName(), summary);
+        String description = String.format("%s - %s", companyInSession.getName(), summary);
         String startDateTimeStr = String.format("%sT%s:00+02:00", newReservation.getDate(), newReservation.getStart_hour());
         String endDateTimeStr = String.format("%sT%s:00+02:00", newReservation.getDate(), newReservation.getEnd_hour());
 

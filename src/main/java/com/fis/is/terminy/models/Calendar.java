@@ -13,6 +13,7 @@ public class Calendar {
 
     private LocalTime start_hour;
     private LocalTime end_hour;
+    private Long workplaceId;
 
     public LocalDate getDate() {return date;}
     public void setDate(LocalDate date) {this.date = date;}
@@ -22,6 +23,14 @@ public class Calendar {
 
     public void  setEnd_hour(LocalTime end_hour) {this.end_hour = end_hour;}
     public LocalTime getEnd_hour() {return  end_hour;}
+
+    public Long getWorkplaceId() {
+        return workplaceId;
+    }
+
+    public void setWorkplaceId(Long workplaceId) {
+        this.workplaceId = workplaceId;
+    }
 
     public String getDayName()
     {

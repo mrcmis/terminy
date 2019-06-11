@@ -2,7 +2,10 @@ package com.fis.is.terminy.controllers;
 
 import com.fis.is.terminy.models.Company;
 import com.fis.is.terminy.models.CompanySchedule;
+import com.fis.is.terminy.models.CompanyScheduleHelper;
+import com.fis.is.terminy.models.CompanyWorkplace;
 import com.fis.is.terminy.repositories.CompanyScheduleRepository;
+import com.fis.is.terminy.repositories.CompanyWorkplaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -21,24 +26,49 @@ public class CompanyScheduleController {
 
     @Autowired
     private CompanyScheduleRepository companyScheduleRepository;
+    @Autowired
+    private CompanyWorkplaceRepository companyWorkplaceRepository;
 
     @GetMapping("company/companySchedule")
-    public String printCompanyWorkingDaysAndHours(@Valid CompanySchedule companySchedule, Model model, Pageable pageable)
+    public String printCompanyWorkingDaysAndHours(@Valid CompanyScheduleHelper companyScheduleHelper, Model model, Pageable pageable)
     {
+        List<CompanySchedule> companyScheduleList = new ArrayList<CompanySchedule>();
         Company currentCompany = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("dayList", companyScheduleRepository.findByCompanyId(currentCompany.getId(), pageable).getContent());
+        List<CompanyWorkplace> companyWorkplaceList = companyWorkplaceRepository.findAllByCompanyId(currentCompany.getId());
+       // model.addAttribute("dayList", companyScheduleRepository.findByCompanyId(currentCompany.getId(), pageable).getContent());
+        for(CompanyWorkplace companyWorkplace : companyWorkplaceList)
+        {
+            List<CompanySchedule> listCompanySchedule = companyScheduleRepository.findAllByCompanyWorkplaceId(companyWorkplace.getId());
+            if(listCompanySchedule!=null)
+                companyScheduleList.addAll(listCompanySchedule);
+           /* if(companyScheduleRepository.findByCompanyWorkplaceId(companyWorkplace.getId()).isPresent())
+                 companyScheduleList.add(companyScheduleRepository.findByCompanyWorkplaceId(companyWorkplace.getId()).get());*/
+
+        }
+        model.addAttribute("dayList", companyScheduleList);
+        model.addAttribute("dayListSize", companyScheduleList.size());
+
+        model.addAttribute("workplaceList", companyWorkplaceList);
         return "companySchedule";
     }
 
    @PostMapping("company/companySchedule")
-    public String createWorkingDay(@Valid CompanySchedule companySchedule)
+    public String createWorkingDay(@Valid CompanyScheduleHelper companyScheduleHelper)
     {
         Company currentCompany = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        companySchedule.setCompany(currentCompany);
+        //companySchedule.setCompany(currentCompany);
+        System.out.println(companyScheduleHelper.getStart_hour() + " " + companyScheduleHelper.getDay() + " " + companyScheduleHelper.getEnd_hour() + " " + companyScheduleHelper.getWorkplaceName()
+        + " " + companyScheduleHelper.getId());
 
-        if(isRowInDB(companySchedule) || !isDayValid(companySchedule))
+        CompanyWorkplace companyWorkplace  = companyWorkplaceRepository.findById(companyScheduleHelper.getId()).get();
+        CompanySchedule companySchedule = new CompanySchedule();
+        companySchedule.setDay(companyScheduleHelper.getDay());
+        companySchedule.setStart_hour(companyScheduleHelper.getStart_hour());
+        companySchedule.setEnd_hour(companyScheduleHelper.getEnd_hour());
+        companySchedule.setCompanyWorkplace(companyWorkplace);
+        if(isRowInDB(companySchedule))
             return "redirect:/company/companySchedule?wrongDay=true";
-        if(companySchedule.getStart_hour().isAfter(companySchedule.getEnd_hour()))
+        if(companyScheduleHelper.getStart_hour().isAfter(companyScheduleHelper.getEnd_hour()))
             return  "redirect:/company/companySchedule?wrongHour=true";
 
         try
@@ -56,7 +86,7 @@ public class CompanyScheduleController {
     public String deleteWorkingDay(@PathVariable(value = "dayId") Long dayId)
     {
         Company currentCompany = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<CompanySchedule> companySchedule = companyScheduleRepository.findByIdAndCompanyId(dayId, currentCompany.getId());
+        Optional<CompanySchedule> companySchedule = companyScheduleRepository.findById(dayId);
         companyScheduleRepository.delete(companySchedule.get());
         return "redirect:/company/companySchedule?deleted=true";
     }
@@ -64,21 +94,8 @@ public class CompanyScheduleController {
 
     private boolean isRowInDB(CompanySchedule companySchedule)
     {
-        if(companyScheduleRepository.findByCompanyIdAndDay(companySchedule.getCompany().getId(), companySchedule.getDay()).isPresent())
-            return true;
-        return false;
+        return companyScheduleRepository.findByCompanyWorkplaceIdAndDay(companySchedule.getCompanyWorkplace().getId(), companySchedule.getDay()).isPresent();
     }
 
-    private boolean isDayValid(CompanySchedule companySchedule)
-    {
-        String[] days = {"Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"};
-
-        boolean isValid = false;
-        for (String day : days) {
-            if(companySchedule.getDay().equals(day))
-                isValid = true;
-        }
-        return isValid;
-    }
 
 }

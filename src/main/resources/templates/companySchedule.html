@@ -30,6 +30,7 @@
                 <li><a href="/company"><span class="glyphicon glyphicon-list"></span> Twoja firma</a></li>
                 <li class="active"><a href="/company/companySchedule"><span class="glyphicon glyphicon-calendar"></span> Kalendarz</a></li>
                 <li><a href="/company/companyServices"><span class="glyphicon glyphicon-plus"></span> Usługi</a></li>
+                <li><a href="/company/companyWorkplace"><span class="glyphicon glyphicon-plus"></span> Stanowiska</a></li>
                 <li><a href="/company/blockingUsers"><span class="glyphicon glyphicon-ban-circle"></span> Blokowanie użytkowników</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -39,7 +40,7 @@
         </div>
     </div>
 </nav>
-    <form class="form-horizontal" action="#" th:action="@{/company/companySchedule}" th:object="${companySchedule}" method="post">
+    <form class="form-horizontal" action="#" th:action="@{/company/companySchedule}" th:object="${companyScheduleHelper}" method="post">
         <fieldset style="text-align: center;">
             <legend style=" width:60%; margin:auto; margin-bottom:15px;"><h1>Dodaj termin</h1></legend>
             <div class="alert alert-danger" th:if="${param.error}">
@@ -93,6 +94,17 @@
                     </div>
                 </div>
             </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="workname">Stanowisko</label>
+                    <div class="col-md-1">
+                        <select name="workname" th:field="*{id}">
+<!--                            <th:block th:each="place : ${workplaceList}">-->
+<!--                                <option th:value="${place.name}"><p th:text="${place.name}"></p> </option>-->
+<!--                            </th:block>-->
+                            <option th:each="place : ${workplaceList}"  th:value="${place.id}" th:text="${place.name}"></option>
+                        </select>
+                    </div>
+                </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="add"></label>
                 <div class="col-md-4">
@@ -102,12 +114,14 @@
             </div>
         </fieldset>
     </form>
+<div th:unless="${dayListSize}==0">
     <table class="table table-hover" style="width:80%; margin:auto;">
         <thead>
         <tr>
             <th>Dzień</th>
             <th>Godzina początkowa</th>
             <th>Godzina końcowa</th>
+            <th>Stanowisko</th>
         </tr>
         </thead>
         <th:block th:each="day : ${dayList}">
@@ -115,6 +129,7 @@
                 <td th:text="${day.day}">...</td>
                 <td th:text="${day.start_hour}">...</td>
                 <td th:text="${day.end_hour}">...</td>
+                <td th:text="${day.companyWorkplace.name}">...</td>
                 <td>
                     <form action="#" th:action="@{/company/companySchedule/delete/__${day.id}__}" th:method="delete" >
                         <input type="hidden" name="_method" value="delete" />
@@ -124,5 +139,6 @@
             </tr>
         </th:block>
     </table>
+</div>
 </body>
 </html>
