@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html xmlns:th="http://www.thymeleaf.org">
+        <head>
+            <meta charset="UTF-8">
+            <title>Terminy</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+            <style type="text/css">
+                body{ font: 14px sans-serif; text-align: center; }
+                .wrapper{ width: 350px; padding: 20px; margin:auto; }
+            </style>
+        </head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Terminy</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/company"><span class="glyphicon glyphicon-list"></span> Twoja firma</a></li>
+                <li><a href="/company/companySchedule"><span class="glyphicon glyphicon-calendar"></span> Kalendarz</a></li>
+                <li><a href="/company/companyServices"><span class="glyphicon glyphicon-plus"></span> Usługi</a></li>
+                <li><a href="/company/blockingUsers"><span class="glyphicon glyphicon-ban-circle"></span> Blokowanie użytkowników</a></li>
+                <li><a href="/company/Report"><span class="glyphicon glyphicon-list-alt"></span> Raporty</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/company/editCompany"><span class="glyphicon glyphicon-user"></span> Twoje konto</a></li>
+                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Wyloguj</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-4">
+                <canvas id="chart"></canvas>
+        </div>
+        <div class="col-4">
+                <canvas id="chart_2"></canvas>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script th:inline="javascript">
+
+    var reservation = [[${reservation}]];
+    var reservationPerWokrplace = [[${reservationPerWokrplace}]];
+    var workplaceArray = [[${workplaceArray}]];
+
+    var ctx = document.getElementById('chart').getContext('2d');
+    var ctx2 = document.getElementById('chart_2').getContext('2d');
+
+    var colors = [];
+    var border = [];
+    var colors2 = [];
+    var border2 = [];
+    for (i = 0; i < 7; i++) {
+        colors.push('rgba(255, 206, 86, 0.2)');
+    }
+    for (i = 0; i < 7; i++) {
+        border.push('rgba(255, 206, 86, 1)');
+    }
+    for (i = 0; i < workplaceArray.length; i++) {
+        colors2.push('rgba(54, 162, 235, 0.2)');
+    }
+    for (i = 0; i < workplaceArray.length; i++) {
+        border2.push('rgba(54, 162, 235, 1)');
+    }
+
+
+
+    var ctx = document.getElementById('chart').getContext('2d');
+
+
+
+    var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Poniedziałek", "Wtorek", "Sroda", "Czwartel", "Piątek", "Sobota", "Niedziela"],
+                datasets: [{
+                    label: 'liczba umówionych wizyt w poszczególnych dniach',
+                    data: reservation,
+                    backgroundColor: colors,
+                    borderColor: border,
+
+                    borderWidth: 1
+                }]
+            }
+        }
+    );
+
+
+    var myChart2 = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: workplaceArray,
+            datasets: [{
+                label: 'liczba umówionych wizyt na dane stanowisko',
+                data: reservationPerWokrplace,
+                backgroundColor: colors2,
+                borderColor: border2,
+                borderWidth: 1
+            }]
+        }
+    });
+
+
+
+
+</script>
+
+
+
+</body>
+</html>
+</title>
+</head>
+<body>
+
+</body>
+</html>
