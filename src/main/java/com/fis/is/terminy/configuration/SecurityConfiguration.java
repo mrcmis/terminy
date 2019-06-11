@@ -60,6 +60,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/register").permitAll()
                 .antMatchers("/forgotPassword").permitAll()
                 .antMatchers("/resetPassword").permitAll()
+                .antMatchers("/terminyHome").permitAll()
                 .antMatchers("/home/**").hasAnyAuthority("USER", "COMPANY")
                 .antMatchers("/user/**").hasAnyAuthority("USER")
                 .antMatchers("/company/blockingUsers/**").hasAnyAuthority("BLOCKING_USERS")
@@ -80,7 +81,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // logout
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login").and()
+                .logoutSuccessUrl("/terminyHome").and()
                 .exceptionHandling()
                 .accessDeniedPage("/access-denied");
 

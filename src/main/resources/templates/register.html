@@ -25,7 +25,6 @@
                 <input type="text" name="phone" th:field="*{phone}" th:placeholder="telefon"/>
                 <p class="register-warning" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
                 <button type="submit" id="button_submit">Utwórz konto</button>
-                <p class="message">Masz konto? <a href="/login">Zaloguj się</a></p>
             </form>
         </div>
     </div>
