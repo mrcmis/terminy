@@ -104,7 +104,13 @@ public class CompanyReservationController {
         List<CompanySchedule> companyScheduleList = new ArrayList<CompanySchedule>();
         Company currentCompany = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<CompanyWorkplace> companyWorkplaceList = companyWorkplaceRepository.findAllByCompanyId(currentCompany.getId());
-
+        List<Reservations> reservationsUnits = new ArrayList<>();
+        for(CompanyWorkplace workplace : companyWorkplaceList)
+        {
+            reservationsUnits.addAll(reservationsRepository.findAllByClientIdAndCompanyWorkplaceId(currentCompany.getId(), workplace.getId()));
+        }
+        model.addAttribute("reservationsList", reservationsUnits);
+        model.addAttribute("reservationsListSize", reservationsUnits.size());
         model.addAttribute("workplaceList", companyWorkplaceList);
         return "companyBlockedReservations";
     }
@@ -114,14 +120,7 @@ public class CompanyReservationController {
     {
         CompanyWorkplace companyWorkplace  = companyWorkplaceRepository.findById(companyScheduleHelper.getId()).get();
         Company currentCompany = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<CompanyWorkplace> companyWorkplaceList = companyWorkplaceRepository.findAllByCompanyId(currentCompany.getId());
-        List<Reservations> reservationsUnits = new ArrayList<>();
-        for(CompanyWorkplace workplace : companyWorkplaceList)
-        {
-            reservationsUnits.addAll(reservationsRepository.findAllByClientIdAndCompanyWorkplaceId(currentCompany.getId(), workplace.getId()));
-        }
-        model.addAttribute("reservationList", reservationsUnits);
-        model.addAttribute("reservationListSize", reservationsUnits.size());
+
         List<CompanyService> companyServiceList = companyServiceRepository.findAllByCompanyId(currentCompany.getId());
         CompanyService companyService = companyServiceList.get(0);
         List<Reservations> reservationsList = reservationsRepository.findAllByCompanyWorkplaceIdAndDate(companyWorkplace.getId(),companyScheduleHelper.getDate());
@@ -146,7 +145,7 @@ public class CompanyReservationController {
         else {
             return "redirect:/company/blockReservation?wrongHour=true";
         }
-        return "companyReservations";
+        return "redirect:/company/blockReservation?added=true";
     }
 
     @DeleteMapping("/company/blockReservation/delete/{reservationId}")
@@ -157,7 +156,7 @@ public class CompanyReservationController {
         if(reservationToDelete.isPresent() && reservationToDelete.get().getDate().isAfter(currentDate))
         {
             reservationsRepository.delete(reservationToDelete.get());
-            return "redirect:/company?deleted=true";
+            return "redirect:/company/blockReservation?deleted=true";
         }
         return "redirect:/company/blockReservation?error=true";
     }
