@@ -110,10 +110,18 @@ public class CompanyReservationController {
     }
 
     @PostMapping("/company/blockReservation")
-    public String submitBlockReservation(@Valid CompanyScheduleHelper companyScheduleHelper)
+    public String submitBlockReservation(@Valid CompanyScheduleHelper companyScheduleHelper, Model model)
     {
         CompanyWorkplace companyWorkplace  = companyWorkplaceRepository.findById(companyScheduleHelper.getId()).get();
         Company currentCompany = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<CompanyWorkplace> companyWorkplaceList = companyWorkplaceRepository.findAllByCompanyId(currentCompany.getId());
+        List<Reservations> reservationsUnits = new ArrayList<>();
+        for(CompanyWorkplace workplace : companyWorkplaceList)
+        {
+            reservationsUnits.addAll(reservationsRepository.findAllByClientIdAndCompanyWorkplaceId(currentCompany.getId(), workplace.getId()));
+        }
+        model.addAttribute("reservationList", reservationsUnits);
+        model.addAttribute("reservationListSize", reservationsUnits.size());
         List<CompanyService> companyServiceList = companyServiceRepository.findAllByCompanyId(currentCompany.getId());
         CompanyService companyService = companyServiceList.get(0);
         List<Reservations> reservationsList = reservationsRepository.findAllByCompanyWorkplaceIdAndDate(companyWorkplace.getId(),companyScheduleHelper.getDate());
@@ -139,6 +147,19 @@ public class CompanyReservationController {
             return "redirect:/company/blockReservation?wrongHour=true";
         }
         return "companyReservations";
+    }
+
+    @DeleteMapping("/company/blockReservation/delete/{reservationId}")
+    public String cancelCompanyReservation(@PathVariable(value = "reservationId") Long reservationId)
+    {
+        Optional<Reservations> reservationToDelete = reservationsRepository.findById(reservationId);
+
+        if(reservationToDelete.isPresent() && reservationToDelete.get().getDate().isAfter(currentDate))
+        {
+            reservationsRepository.delete(reservationToDelete.get());
+            return "redirect:/company?deleted=true";
+        }
+        return "redirect:/company/blockReservation?error=true";
     }
 
     private void removeReservationWithConfirmation(Reservations reservationToDelete, Client client) {

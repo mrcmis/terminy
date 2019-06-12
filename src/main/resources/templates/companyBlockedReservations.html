@@ -32,6 +32,7 @@
                 <li><a href="/company/companyServices"><span class="glyphicon glyphicon-plus"></span> Usługi</a></li>
                 <li><a href="/company/companyWorkplace"><span class="glyphicon glyphicon-plus"></span> Stanowiska</a></li>
                 <li><a href="/company/blockingUsers"><span class="glyphicon glyphicon-ban-circle"></span> Blokowanie użytkowników</a></li>
+                <li><a href="/company/blockReservation"><span class="glyphicon glyphicon-list-alt"></span> Blokowanie terminów</a></li>
                 <li><a href="/company/Report"><span class="glyphicon glyphicon-list-alt"></span> Raporty</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -48,7 +49,7 @@
             Wystąpił błąd! Spróbuj ponownie później.
         </div>
         <div class="alert alert-danger" th:if="${param.wrongHour}">
-            Nie można zablokować tego terminu ponieważ jest już zajęty przz klienta!
+            Nie można zablokować tego terminu ponieważ jest już zajęty przez klienta!
         </div>
         <div class="alert alert-danger" th:if="${param.wrongDay}">
             Proszę podać poprawny dzień!
@@ -106,6 +107,31 @@
         </div>
     </fieldset>
 </form>
-
+<div th:unless="${reservationsListSize}==0">
+    <table class="table table-hover" style="width:80%; margin:auto;">
+        <thead>
+        <tr>
+            <th>Data</th>
+            <th>Godzina początkowa</th>
+            <th>Godzina końcowa</th>
+            <th>Stanowisko</th>
+        </tr>
+        </thead>
+        <th:block th:each="reservation : ${reservationsList}">
+            <tr style="text-align: left;">
+                <td th:text="${reservation.date}">...</td>
+                <td th:text="${reservation.start_hour}">...</td>
+                <td th:text="${reservation.end_hour}">...</td>
+                <td th:text="${reservation.companyWorkplace.name}">...</td>
+                <td>
+                    <form  action="#" th:action="@{/company/blockReservation/delete/__${reservation.id}__}" th:method="delete" >
+                        <input type="hidden" name="_method" value="delete" />
+                        <button type="submit" class="btn btn-link">Usuń</button>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+    </table>
+</div>
 </body>
 </html>
