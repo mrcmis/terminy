@@ -32,6 +32,7 @@
                 <li><a href="/company/companyServices"><span class="glyphicon glyphicon-plus"></span> Usługi</a></li>
                 <li><a href="/company/companyWorkplace"><span class="glyphicon glyphicon-plus"></span> Stanowiska</a></li>
                 <li><a href="/company/blockingUsers"><span class="glyphicon glyphicon-ban-circle"></span> Blokowanie użytkowników</a></li>
+                <li><a href="/company/blockReservation"><span class="glyphicon glyphicon-list-alt"></span> Blokowanie terminów</a></li>
                 <li><a href="/company/Report"><span class="glyphicon glyphicon-list-alt"></span> Raporty</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -69,9 +70,9 @@
         <th:block th:each="reservation : ${reservationsList}">
             <tr style="text-align: left;">
                 <td th:text="${reservation.date} + ', ' + ${reservation.start_hour}">...</td>
-                <td th:text="${reservation.service.name}">...</td>
-                <td th:text="${reservation.client.name}+ ' ' + ${reservation.client.surname}">...</td>
-                <td th:text="${reservation.client.mail} + ', ' + ${reservation.client.phone}">...</td>
+                <td th:text="${reservation.serviceName}">...</td>
+                <td th:text="${reservation.name}+ ' ' + ${reservation.surname}">...</td>
+                <td th:text="${reservation.mail} + ', ' + ${reservation.phone}">...</td>
                 <td>
                     <form  action="#" th:action="@{/company/delete/__${reservation.id}__}" th:method="delete" >
                         <input type="hidden" name="_method" value="delete" />

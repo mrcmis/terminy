@@ -11,8 +11,8 @@ public class EmailContent {
     private String subject;
     private StringBuilder text = new StringBuilder();
 
-    public EmailContent addCompanyReservationBasicContent(Reservations reservation) {
-        Client client = reservation.getClient();
+    public EmailContent addCompanyReservationBasicContent(Reservations reservation, Client client) {
+        //Client client = reservation.getClient();
         text.append(String.format("Nowa rezerwacja: %s - %s %s, %s\nTermin: %s\n",
                 reservation.getService().getName(), client.getName(), client.getSurname(),client.getPhone(),
                 reservationDateTime(reservation)));

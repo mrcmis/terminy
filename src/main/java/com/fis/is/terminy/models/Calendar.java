@@ -11,7 +11,9 @@ public class Calendar {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime start_hour;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime end_hour;
     private Long workplaceId;
 
