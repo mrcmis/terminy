@@ -61,15 +61,14 @@
             Termin usunięty!
         </div>
         <div class="wrapper">
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="data">Data</label>
-                <div class="col-md-2">
-                    <div class="input-group">
+            <div class="form-group row">
+                    <label class="col-md-4 control-label" for="data">Data</label>
+                    <div class="col-md-2">
                         <input id="data" name="data" type="date" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                               placeholder="Data" class="form-control" required="" th:field="*{date}"/>
+                               placeholder="Data" class="form-control mb-2 mr-sm-2" style="width:fit-content; display: inline;" required="" th:field="*{date}"/>
                     </div>
-                </div>
             </div>
+
             <div class="form-group">
                 <label class="col-md-4 control-label" for="time_start">Godzina początkowa</label>
                 <div class="col-md-2">
@@ -93,18 +92,18 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="workname">Stanowisko</label>
                 <div class="col-md-1">
-                    <select name="workname" th:field="*{id}">
+                    <select name="workname" class="form-control" style="width:fit-content; display: inline;" th:field="*{id}">
                         <option th:each="place : ${workplaceList}"  th:value="${place.id}" th:text="${place.name}"></option>
                     </select>
                 </div>
             </div>
+        </div>
             <div class="form-group">
                 <label class="col-md-4 control-label" for="add"></label>
                 <div class="col-md-4">
                     <button id="add" name="add" class="btn btn-primary">Dodaj</button>
                 </div>
             </div>
-        </div>
     </fieldset>
 </form>
 <div th:unless="${reservationsListSize}==0">

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Terminy - stanowiska</title>
+    <title>Terminy - firma</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,11 +27,10 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li><a href="/company"><span class="glyphicon glyphicon-list"></span> Twoja firma</a></li>
+                <li class="active"><a href="/company"><span class="glyphicon glyphicon-list"></span> Twoja firma</a></li>
                 <li><a href="/company/companySchedule"><span class="glyphicon glyphicon-calendar"></span> Kalendarz</a></li>
-                <li><a href="/company/blockReservation"><span class="glyphicon glyphicon-list-alt"></span> Blokowanie terminów</a></li>
                 <li><a href="/company/companyServices"><span class="glyphicon glyphicon-plus"></span> Usługi</a></li>
-                <li class="active"><a href="/company/companyWorkplace"><span class="glyphicon glyphicon-plus"></span> Stanowiska</a></li>
+                <li><a href="/company/companyWorkplace"><span class="glyphicon glyphicon-plus"></span> Stanowiska</a></li>
                 <li><a href="/company/blockingUsers"><span class="glyphicon glyphicon-ban-circle"></span> Blokowanie użytkowników</a></li>
                 <li><a href="/company/Report"><span class="glyphicon glyphicon-list-alt"></span> Raporty</a></li>
             </ul>
@@ -57,12 +56,15 @@
             Stanowsko dodane!
         </div>
 
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="name">Nazwa stanowiska</label>
-            <div class="col-md-2">
-                <input id="name" name="name" type="text" placeholder="Nazwa" class="form-control input-md" required="" th:field="*{name}">
+        <div class="wrapper">
+            <div class="form-group row">
+                <label for="name" class="col-md-4 control-label">Nazwa stanowiska</label>
+                <div class="col-md-2">
+                    <input class="form-control" id="name" name="name" style="width:fit-content; display: inline;" type="text" placeholder="Nazwa" class="form-control input-md" required="" th:field="*{name}">
+                </div>
             </div>
         </div>
+
         <div class="form-group">
             <label class="col-md-4 control-label" for="add"></label>
             <div class="col-md-4">

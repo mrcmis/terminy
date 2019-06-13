@@ -64,7 +64,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="name">Dzień</label>
                 <div class="col-md-1">
-                    <select name="name" th:field="*{day}">
+                    <select name="name" class="form-control" style="width:fit-content; display: inline;" th:field="*{day}">
                         <option value="Poniedziałek">Poniedziałek</option>
                         <option value="Wtorek">Wtorek</option>
                         <option value="Środa">Środa</option>
@@ -99,7 +99,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="workname">Stanowisko</label>
                     <div class="col-md-1">
-                        <select name="workname" th:field="*{id}">
+                        <select name="workname" class="form-control" style="width:fit-content; display: inline;" th:field="*{id}">
 <!--                            <th:block th:each="place : ${workplaceList}">-->
 <!--                                <option th:value="${place.name}"><p th:text="${place.name}"></p> </option>-->
 <!--                            </th:block>-->
