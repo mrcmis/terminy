@@ -1,11 +1,6 @@
 package com.fis.is.terminy.controllers;
 
-import com.fis.is.terminy.converters.PrivilegesConverter;
-import com.fis.is.terminy.models.Client;
-import com.fis.is.terminy.models.Company;
-import com.fis.is.terminy.models.CompanyWorkplace;
-import com.fis.is.terminy.models.Reservations;
-import com.fis.is.terminy.notifications.CalendarEventCreator;
+import com.fis.is.terminy.models.*;
 import com.fis.is.terminy.notifications.EmailContent;
 import com.fis.is.terminy.notifications.EmailService;
 import com.fis.is.terminy.repositories.CompanyWorkplaceRepository;
@@ -15,12 +10,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,12 +43,22 @@ public class ClientReservationController {
         {
             reservationsUnits.addAll(reservationsRepository.findAllByClientIdAndCompanyWorkplaceId(currentClient.getId(),companyWorkplace.getId()));
         }
-
         reservationsUnits.sort((Reservations reservation1, Reservations reservation2)-> reservation2.getDate().compareTo(reservation1.getDate()));
-        if(reservationsUnits.isEmpty())
-            System.out.println("EMPTY");
-        model.addAttribute("reservationsList", reservationsUnits);
-        model.addAttribute("reservationsListSize", reservationsUnits.size());
+        List<CompanyReservationsHelper> companyReservationsHelperList = new ArrayList<>();
+        for(Reservations reservations : reservationsUnits)
+        {
+                CompanyReservationsHelper companyReservationsHelper = new CompanyReservationsHelper();
+                companyReservationsHelper.setId(reservations.getId());
+                companyReservationsHelper.setDate(reservations.getDate());
+                companyReservationsHelper.setStart_hour(reservations.getStart_hour());
+                companyReservationsHelper.setServiceName(reservations.getService().getName());
+                companyReservationsHelper.setWorkplace(reservations.getCompanyWorkplace().getName());
+
+                companyReservationsHelperList.add(companyReservationsHelper);
+        }
+
+        model.addAttribute("reservationsList", companyReservationsHelperList);
+        model.addAttribute("reservationsListSize", companyReservationsHelperList.size());
         return "clientReservations";
     }
 

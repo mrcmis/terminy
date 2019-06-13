@@ -70,6 +70,7 @@ public class CompanyReservationController {
                 companyReservationsHelper.setDate(reservations.getDate());
                 companyReservationsHelper.setStart_hour(reservations.getStart_hour());
                 companyReservationsHelper.setServiceName(reservations.getService().getName());
+                companyReservationsHelper.setWorkplace(reservations.getCompanyWorkplace().getName());
                 companyReservationsHelper.setName(client.getName());
                 companyReservationsHelper.setMail(client.getMail());
                 companyReservationsHelper.setPhone(client.getPhone());

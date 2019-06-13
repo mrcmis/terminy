@@ -2,9 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="resources/style.css">
-    <link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Edycja danych</title>
+    <link rel="stylesheet" type="text/css" href="../resources/userDataForms.css">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,6 +14,7 @@
         body{ font: 14px sans-serif; text-align: center; }
         .wrapper{ width: 350px; padding: 20px; margin:auto; }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -31,10 +31,10 @@
             <ul class="nav navbar-nav">
                 <li><a href="/company"><span class="glyphicon glyphicon-list"></span> Twoja firma</a></li>
                 <li><a href="/company/companySchedule"><span class="glyphicon glyphicon-calendar"></span> Kalendarz</a></li>
+                <li><a href="/company/blockReservation"><span class="glyphicon glyphicon-list-alt"></span> Blokowanie terminów</a></li>
                 <li><a href="/company/companyServices"><span class="glyphicon glyphicon-plus"></span> Usługi</a></li>
                 <li><a href="/company/companyWorkplace"><span class="glyphicon glyphicon-plus"></span> Stanowiska</a></li>
                 <li><a href="/company/blockingUsers"><span class="glyphicon glyphicon-ban-circle"></span> Blokowanie użytkowników</a></li>
-                <li><a href="/company/blockReservation"><span class="glyphicon glyphicon-list-alt"></span> Blokowanie terminów</a></li>
                 <li><a href="/company/Report"><span class="glyphicon glyphicon-list-alt"></span> Raporty</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -46,29 +46,29 @@
 </nav>
 
 <div id = "main">
-    <form class="w3-container" action="#" th:action="@{/company/editCompany}" th:object="${company}" method="post">
+    <div class="login-page">
+    <div class="form">
+        <form action="#" th:action="@{/company/editCompany}" th:object="${company}" method="post">
+            <label><b>Email</b></label>
+            <input type="text" name="mail" th:field="*{mail}">
+            <p class="register-warning" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p>
 
-        <label class="w3-text-red"><b>Email</b></label>
-        <input class="w3-input w3-border" type="text" name="mail" th:field="*{mail}">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p>
+            <label><b>Nazwa</b></label>
+            <input type="text" name="name" th:field="*{name}">
+            <p class="register-warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
 
-        <label class="w3-text-red"><b>Name</b></label>
-        <input class="w3-input w3-border" type="text" name="name" th:field="*{name}">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+            <label><b>Telefon</b></label>
+            <input type="text" name="phone" th:field="*{phone}">
+            <p class="register-warning" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
 
-        <label class="w3-text-red"><b>Phone</b></label>
-        <input class="w3-input w3-border" type="text" name="phone" th:field="*{phone}">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
+            <label><b>Hasło</b></label>
+            <input type="text" name="password" value="">
+            <p class="register-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
 
-        <label class="w3-text-red"><b>Password</b></label>
-        <input class="w3-input w3-border" type="text" name="password" value="">
-        <p class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-
-
-        <br><button class="w3-btn w3-red" type="submit" id="button_submit">Edit</button>
-
-    </form>
-
+            <br><button type="submit" id="button_submit">Edytuj</button>
+        </form>
+    </div>
+    </div>
 </div>
 </body>
 </html>

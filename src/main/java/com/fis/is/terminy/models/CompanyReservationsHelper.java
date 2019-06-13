@@ -15,6 +15,7 @@ public class CompanyReservationsHelper {
     private LocalTime start_hour;
 
     private String serviceName;
+    private String workplace;
 
     private String name;
     private String surname;
@@ -59,4 +60,12 @@ public class CompanyReservationsHelper {
 
     public Long getId() {return this.id;}
     public void setId(Long id) {this.id = id;}
+
+    public String getWorkplace() {
+        return workplace;
+    }
+
+    public void setWorkplace(String workplace) {
+        this.workplace = workplace;
+    }
 }

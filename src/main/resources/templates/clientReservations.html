@@ -56,15 +56,15 @@
         <thead>
         <tr>
             <th>Data</th>
-            <th>Godzina początkowa</th>
-            <th>Godzina końcowa</th>
+            <th>Usługa</th>
+            <th>Stanowisko</th>
         </tr>
         </thead>
         <th:block th:each="reservation : ${reservationsList}">
             <tr style="text-align: left;">
-                <td th:text="${reservation.date}">...</td>
-                <td th:text="${reservation.start_hour}">...</td>
-                <td th:text="${reservation.end_hour}">...</td>
+                <td th:text="${reservation.date} + ', ' + ${reservation.start_hour}">...</td>
+                <td th:text="${reservation.serviceName}">...</td>
+                <td th:text="${reservation.workplace}">...</td>
                 <td>
                     <form  action="#" th:action="@{/user/clientReservations/delete/__${reservation.id}__}" th:method="delete" >
                         <input type="hidden" name="_method" value="delete" />
