@@ -105,8 +105,8 @@ public class ReservationController {
             return "redirect:/user/reservation?notsaved=true";
         }
 
-        /*setConfirmation(redirectAttributes, reservationToSave);
-        notifyUsers(redirectAttributes, currentClient, reservationToSave);*/
+        setConfirmation(redirectAttributes, reservationToSave);
+        notifyUsers(redirectAttributes, currentClient, reservationToSave);
 
         return "redirect:/user";
     }
