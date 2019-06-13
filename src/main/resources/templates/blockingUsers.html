@@ -45,8 +45,10 @@
 <form th:action="@{/company/blockingUsers}" method="POST" th:object="${company}">
     <table class="table table-hover" style="width:80%; margin:auto;">
             <th:block th:each="client : ${allClients}">
-                <td><label th:text="${client.username}"></label></td>
-                <td> <input type="checkbox" th:field="*{blockedUsers}" th:value="${client.id}" th:checked="${blockedUsers.contains(client)}"></td>
+                <tr>
+                    <td><label th:text="${client.username}"></label></td>
+                    <td> <input type="checkbox" th:field="*{blockedUsers}" th:value="${client.id}" th:checked="${blockedUsers.contains(client)}"></td>
+                </tr>
             </th:block>
     </table>
 
