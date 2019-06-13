@@ -92,7 +92,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="workname">Stanowisko</label>
                 <div class="col-md-1">
-                    <select name="workname" class="form-control" style="display: inline-table; width: auto;" th:field="*{id}">
+                    <select name="workname" th:field="*{id}">
                         <option th:each="place : ${workplaceList}"  th:value="${place.id}" th:text="${place.name}"></option>
                     </select>
                 </div>
