@@ -69,7 +69,7 @@ public class AuthenticationController {
             Company company = optionalCompany.get();
             model.addAttribute("company", company);
         } else {
-            model.addAttribute("company", new Company());
+            throw new IllegalArgumentException("Brak firmy w bazie danych");
         }
 
         return "login";

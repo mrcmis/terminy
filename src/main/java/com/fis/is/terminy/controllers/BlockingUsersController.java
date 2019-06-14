@@ -34,23 +34,17 @@ public class BlockingUsersController {
     @GetMapping("/company/blockingUsers")
     public String blockingUsers(Model model) {
         Company logged = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Company company = companyRepository.getOne(logged.getId());
-       // List<Reservations> reservations = reservationsRepository.findAllByCompanyId(logged.getId());
 
         List<Reservations> reservations = new ArrayList<>();
-        List<CompanyWorkplace> companyWorkplaceList = companyWorkplaceRepository.findAllByCompanyId(company.getId());
-        // List<Reservations> reservationsUnits = reservationsRepository.findAllByCompanyId(company.getId());
+        List<CompanyWorkplace> companyWorkplaceList = companyWorkplaceRepository.findAllByCompanyId(logged.getId());
+
         for(CompanyWorkplace companyWorkplace : companyWorkplaceList)
-        {
-           // List<Reservations> list = reservationsRepository.findAllByCompanyWorkplaceId(companyWorkplace.getId());
             reservations.addAll(reservationsRepository.findAllByCompanyWorkplaceId(companyWorkplace.getId()));
-        }
 
         Set<BaseEntity> clients = getUsersFromReservations(reservations);
 
-        model.addAttribute("company", company);
-        model.addAttribute("blockedUsers", company.getBlockedUsers());
-
+        model.addAttribute("company", logged);
+        model.addAttribute("blockedUsers", logged.getBlockedUsers());
         model.addAttribute("allClients", clients);
 
         return "blockingUsers";
@@ -60,9 +54,8 @@ public class BlockingUsersController {
     public String updateBlockedUsers(@ModelAttribute("company") Company company) {
 
         Company logged = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Company toEdit = companyRepository.getOne(logged.getId());
-        toEdit.setBlockedUsers(company.getBlockedUsers());
-        companyRepository.save(toEdit);
+        logged.setBlockedUsers(company.getBlockedUsers());
+        companyRepository.save(logged);
 
         return "redirect:blockingUsers";
     }
