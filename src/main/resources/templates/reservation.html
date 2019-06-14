@@ -40,15 +40,25 @@
 <form class="form-horizontal" action="#" th:action="@{/user/reservation}" th:object="${calendar}" method="post">
     <fieldset style="...">
         <legend style="..."> <h1>Wybierz datę</h1></legend>
+        <div class="wrapper">
         <div class="form-group">
             <label class="col-md-4 control-label" for="data">Data</label>
             <div class="col-md-2">
-                <div class="input-group">
+<!--                <div class="input-group">-->
                     <input id="data" name="data" type="date" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                           placeholder="Data" class="form-control" required="" th:field="*{date}"/>
-                </div>
+                           placeholder="Data" class="form-control" style="width:auto; display: inline;" required="" th:field="*{date}"/>
+<!--                </div>-->
             </div>
         </div>
+
+<!--        <div class="form-group row">-->
+<!--            <label class="col-md-4 control-label" for="name">Nazwa</label>-->
+<!--            <div class="col-md-2">-->
+<!--                <input id="name" name="name" type="text" placeholder="Nazwa" class="form-control" style="width:auto; display: inline;" required="" th:field="*{name}">-->
+<!--            </div>-->
+<!--        </div>-->
+
+
         <div class="form-group">
             <label class="col-md-4 control-label" for="workname">Stanowisko</label>
             <div class="col-md-1">
@@ -63,6 +73,8 @@
                 <button id="add" name="add" class="btn btn-primary">Wybierz</button>
             </div>
         </div>
+        </div>
+
         <div class="alert alert-danger" th:if="${param.error}">
             Firma nie pracuje w ten dzień!
         </div>
