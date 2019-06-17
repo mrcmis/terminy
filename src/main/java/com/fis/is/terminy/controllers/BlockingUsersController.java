@@ -61,10 +61,12 @@ public class BlockingUsersController {
     }
 
     private Set<BaseEntity> getUsersFromReservations(List<? extends Reservations> reservations) {
+        Company logged = (Company) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Set<BaseEntity> clients = new HashSet<>();
         for (Reservations res : reservations) {
             clients.add(res.getClient());
         }
+        clients.removeIf((BaseEntity baseEntity) -> baseEntity.getId() == logged.getId());
         return clients;
     }
 }
